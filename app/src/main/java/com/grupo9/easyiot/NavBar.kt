@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,17 +32,24 @@ import androidx.compose.ui.unit.dp
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     var currentDirection by rememberSaveable { mutableStateOf(NavIcons.DASHBOARD) }
     NavigationSuiteScaffold(
-        navigationSuiteColors = NavigationSuiteDefaults.colors(),
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.primary
+        ),
         navigationSuiteItems = {
             NavIcons.entries.forEach {
                 item(
                     icon = {
                         Icon(
                             painter = painterResource(id = it.icon),
-                            contentDescription = stringResource(id = it.contentDescriptor)
+                            contentDescription = stringResource(id = it.contentDescriptor),
+                            tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+
                         )
                     },
-                    label = { Text(stringResource(id = it.label))},
+                    label = { Text(
+                        stringResource(id = it.label),
+                        color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                    )},
                     selected = currentDirection == it,
                     onClick = { currentDirection = it }
                 )
@@ -60,7 +68,6 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
 
     }
 }
-
 @Composable
 fun DevicesScreen() {
     Column {
@@ -75,10 +82,6 @@ fun DevicesScreen() {
 @Composable
 fun DashboardScreen() {
     Text(text = "DashBoard")
-}
-@Composable
-fun RoutinesScreen() {
-    Text(text = "Routines")
 }
 
 @Preview(showBackground = true)

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EasyIoT</string>
+    <string name="routines">Routines</string>
+    <string name="notifications">Notifications</string>
+    <string name="bottom_navigation_devices">Devices</string>
+    <string name="bottom_navigation_routines">Routines</string>
+    <string name="bottom_navigation_dashboard">Dashboard</string>
+
 </resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EasyIoT</string>
+    <string name="routines">Rutinas</string>
+    <string name="notifications">Notificaciones</string>
+    <string name="bottom_navigation_devices">Dispositivos</string>
+    <string name="bottom_navigation_routines">Rutinas</string>
+    <string name="bottom_navigation_dashboard">Panel Central</string>
+</resources>

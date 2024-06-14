@@ -7,7 +7,7 @@ data class Actions (
 
   @SerialName("device"     ) var device     : Device,
   @SerialName("actionName" ) var actionName : String,
-  @SerialName("params"     ) var params     : ArrayList<String> = arrayListOf()
-  //@SerialName("meta"       ) var meta       : Meta?             = Meta()
+  @SerialName("params"     ) var params     : ArrayList<String> = arrayListOf(),
+  @SerialName("meta"       ) var meta       : Meta
 
 )

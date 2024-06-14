@@ -1,4 +1,4 @@
-package com.grupo9.easyiot.Screens
+package com.grupo9.easyiot.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +21,7 @@ class RoutinesViewModel : ViewModel() {
             routinesState = RoutinesState.Loading
             routinesState = try {
                 val result = RoutineApi.retorfitService.getRoutineList()
+                print(result)
                 RoutinesState.Success(result)
             }catch (e: Exception){
                 RoutinesState.Error

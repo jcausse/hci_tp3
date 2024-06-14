@@ -1,4 +1,4 @@
-package com.grupo9.easyiot.Screens
+package com.grupo9.easyiot.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -35,23 +35,10 @@ fun DevicesScreen(
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        TitleDevices(text = "Devices")
+        Title(text = "Devices")
         CardGridDev()
     }
 }
-@Composable
-fun TitleDevices(text: String) {
-    androidx.compose.material3.Text(
-        modifier = Modifier.padding(5.dp),
-        fontSize = 64.sp,
-        color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
-        text = text,
-        fontFamily = kodchasan,
-        fontWeight = FontWeight.Bold
-    )
-}
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardGridDev() {
     LazyVerticalGrid(

@@ -6,6 +6,6 @@ import kotlinx.serialization.SerialName
 
 data class Devices (
 
-  @SerialName("result" ) var result : ArrayList<RoutineResult> = arrayListOf()
+  @SerialName("result" ) var result : ArrayList<DeviceResult> = arrayListOf()
 
 )

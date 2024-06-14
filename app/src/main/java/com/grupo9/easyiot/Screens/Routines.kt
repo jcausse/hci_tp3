@@ -1,12 +1,11 @@
-package com.grupo9.easyiot
+package com.grupo9.easyiot.Screens
 
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,10 +27,37 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grupo9.easyiot.R
+import com.grupo9.easyiot.model.routines.RoutineResult
 
 
 @Composable
-fun RoutinesScreen(){
+fun RoutinesScreen(
+    routinesState: RoutinesState,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+){
+
+    when ( routinesState ){
+        is RoutinesState.Loading -> {
+            LoadingRoutineScreen()
+        }
+        is RoutinesState.Success -> {
+            SuccessRoutineScreen(routinesState.get.result)
+        }
+        is RoutinesState.Error -> {
+            ErrorRoutineScreen()
+        }
+    }
+}
+
+@Composable
+fun LoadingRoutineScreen(){
+    // TODO
+}
+
+@Composable
+fun SuccessRoutineScreen(routines: List<RoutineResult>){
     Column (
         modifier = Modifier.fillMaxSize()
     ){
@@ -42,12 +66,17 @@ fun RoutinesScreen(){
     }
 }
 
+@Composable
+fun ErrorRoutineScreen(){
+    // TODO
+}
+/*
 @Preview
 @Composable
 fun RoutinesScreenPreview(){
     RoutinesScreen()
 }
-
+*/
 
 
 @Composable

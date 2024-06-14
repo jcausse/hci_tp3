@@ -1,6 +1,5 @@
-package com.grupo9.easyiot.Screens
+package com.grupo9.easyiot.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,7 +50,6 @@ fun TitleDevices(text: String) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardGridDev() {
     LazyVerticalGrid(
@@ -60,8 +58,8 @@ fun CardGridDev() {
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        items((1..20).toList()) { index ->
-            DeviceCard(name = "A mimir", statusOn = true, type = "fridge")
+        items((1..20).toList()) { _ ->
+            DeviceCard(name = "A mimir", type = "fridge")
         }
     }
 }

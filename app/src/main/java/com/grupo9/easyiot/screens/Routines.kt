@@ -1,4 +1,4 @@
-package com.grupo9.easyiot.Screens
+package com.grupo9.easyiot.screens
 
 
 import androidx.compose.foundation.clickable

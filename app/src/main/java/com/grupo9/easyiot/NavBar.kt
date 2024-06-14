@@ -20,8 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.grupo9.easyiot.Screens.RoutinesScreen
-import com.grupo9.easyiot.Screens.RoutinesViewModel
+import com.grupo9.easyiot.screens.RoutinesScreen
+import com.grupo9.easyiot.screens.RoutinesViewModel
 
 
 @Composable

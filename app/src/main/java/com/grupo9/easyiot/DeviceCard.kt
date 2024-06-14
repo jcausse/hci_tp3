@@ -41,13 +41,14 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 @Composable
-fun DeviceCard(name: String, statusOn: Boolean, type: String) {
+fun DeviceCard(name: String, type: String) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .padding(10.dp)
             .width(160.dp)
             .height(160.dp),
-        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White, contentColor = MaterialTheme.colorScheme.primary),
+        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
+            contentColor = MaterialTheme.colorScheme.primary),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
     ) {
         Column (
@@ -57,16 +58,6 @@ fun DeviceCard(name: String, statusOn: Boolean, type: String) {
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Absolute.Left
-            ){
-                if(statusOn){
-                    Icon(painter = painterResource(R.drawable.power),contentDescription = "status")
-                } else {
-                    Icon(painter = painterResource(R.drawable.power),contentDescription = "status")
-                }
-            }
             Row (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween

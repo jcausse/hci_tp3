@@ -4,7 +4,6 @@ import kotlinx.serialization.SerialName
 
 
 data class Routines (
-
   @SerialName("result" ) var result : ArrayList<RoutineResult> = arrayListOf()
 
 )

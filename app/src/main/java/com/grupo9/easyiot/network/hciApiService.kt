@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import kotlinx.serialization.json.Json
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-private const val BASE_URL = "http://localhost:8080/api/routines"
+private const val BASE_URL = "http://10.0.2.2:8080/api/"
 
 private val httpLoggingInterceptor = HttpLoggingInterceptor()
     .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -22,13 +22,9 @@ private val json = Json { ignoreUnknownKeys = true }
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
     .baseUrl(BASE_URL).client(okHttpClient).build()
-/*
-private val retrofitroutines = Retrofit.Builder()
-    .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-    .baseUrl("$BASE_URL/routines").client(okHttpClient).build()
-*/
+
 interface DeviceApiService {
-    @GET("api")
+    @GET("devices")
     suspend fun getDeviceList () : Devices
 }
 
@@ -38,7 +34,7 @@ object DeviceApi {
     }
 }
 interface RoutineApiService {
-    @GET("api")
+    @GET("routines")
     suspend fun getRoutineList() : Routines
 }
 

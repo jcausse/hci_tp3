@@ -8,7 +8,7 @@ data class RoutineResult (
 
   @SerialName("id"      ) var id      : String,
   @SerialName("name"    ) var name    : String,
-  @SerialName("actions" ) var actions : ArrayList<Actions> = arrayListOf()
-  //@SerialName("meta"    ) var meta    : Meta?              = Meta()
+  @SerialName("actions" ) var actions : ArrayList<Actions> = arrayListOf(),
+  @SerialName("meta"    ) var meta    : Meta
 
 )

@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,8 +53,13 @@ fun RoutinesScreen(
 }
 
 @Composable
+fun ErrorRoutineScreen() {
+    Text(text = "Error")
+}
+
+@Composable
 fun LoadingRoutineScreen(){
-    // TODO
+    Text(text ="loading")
 }
 
 @Composable
@@ -62,13 +68,11 @@ fun SuccessRoutineScreen(routines: List<RoutineResult>){
         modifier = Modifier.fillMaxSize()
     ){
         Title(text = stringResource(id = R.string.routines))
-        CardList()
-    }
-}
+        for ( routine in routines ){
+           RoutineCard(name = routine.name, time = routine.meta.weekdays, description = routine.meta.description )
+        }
 
-@Composable
-fun ErrorRoutineScreen(){
-    // TODO
+    }
 }
 /*
 @Preview
@@ -90,7 +94,9 @@ fun RoutineCard(name: String, time: String, description: String) {
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column (
-            modifier = Modifier.padding(16.dp).fillMaxSize()
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
         ) {
             Row (
                 modifier = Modifier.fillMaxWidth(),
@@ -101,9 +107,11 @@ fun RoutineCard(name: String, time: String, description: String) {
                 Icon(
                     imageVector = Icons.Rounded.PlayArrow,
                     contentDescription = "Play",
-                    modifier = Modifier.padding(32.dp).clickable {
-                        playRoutine()
-                    }
+                    modifier = Modifier
+                        .padding(32.dp)
+                        .clickable {
+                            playRoutine()
+                        }
                 )
             }
             Text(
@@ -117,10 +125,12 @@ fun RoutineCard(name: String, time: String, description: String) {
 @Composable
 fun Title ( text: String ){
     Text(
-        modifier = Modifier.padding(16.dp),
-        fontSize = 32.sp,
+        modifier = Modifier.padding(5.dp),
+        fontSize = 64.sp,
         color = MaterialTheme.colorScheme.primary,
-        text = text
+        text = text,
+        fontFamily = kodchasan,
+        fontWeight = FontWeight.Bold
     )
 }
 @Preview(showBackground = true)

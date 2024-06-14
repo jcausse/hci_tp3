@@ -5,8 +5,8 @@ import kotlinx.serialization.SerialName
 
 data class State (
 
-  @SerialName("status"     ) var status     : String? = null,
-  @SerialName("color"      ) var color      : String? = null,
-  @SerialName("brightness" ) var brightness : Int?    = null
+  @SerialName("status"     ) var status     : String,
+  @SerialName("color"      ) var color      : String,
+  @SerialName("brightness" ) var brightness : Int
 
 )

@@ -21,6 +21,7 @@ class RoutinesViewModel : ViewModel() {
             routinesState = RoutinesState.Loading
             routinesState = try {
                 val result = RoutineApi.retorfitService.getRoutineList()
+                print(result)
                 RoutinesState.Success(result)
             }catch (e: Exception){
                 RoutinesState.Error

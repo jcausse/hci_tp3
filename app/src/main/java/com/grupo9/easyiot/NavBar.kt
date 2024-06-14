@@ -4,17 +4,10 @@ package com.grupo9.easyiot
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,11 +19,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.grupo9.easyiot.Screens.RoutinesScreen
+import com.grupo9.easyiot.Screens.RoutinesViewModel
+
 
 @Composable
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     var currentDirection by rememberSaveable { mutableStateOf(NavIcons.DASHBOARD) }
+    //ViewModels of all the screens
+    val routinesViewModel: RoutinesViewModel = viewModel()
+
     NavigationSuiteScaffold(
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationBarContainerColor = MaterialTheme.colorScheme.primary
@@ -62,7 +61,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
             when (currentDirection) {
                 NavIcons.DEVICES -> DevicesScreen()
                 NavIcons.DASHBOARD -> DashboardScreen()
-                NavIcons.ROUTINES -> RoutinesScreen()
+                NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
             }
         }
 

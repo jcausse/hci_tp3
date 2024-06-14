@@ -1,5 +1,4 @@
 package com.grupo9.easyiot.screens
-package com.grupo9.easyiot.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.DeviceCard
 import com.grupo9.easyiot.R
 

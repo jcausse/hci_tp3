@@ -71,6 +71,7 @@ fun DeviceCard(name: String, type: String) {
         }
     }
 }
+
 @Composable
 fun TitleDeviceCard(text: String) {
     androidx.compose.material3.Text(

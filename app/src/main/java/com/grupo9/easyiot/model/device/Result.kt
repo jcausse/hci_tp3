@@ -2,7 +2,6 @@ package com.grupo9.easyiot.model.device
 
 import kotlinx.serialization.SerialName
 
-
 data class DeviceResult (
 
   @SerialName("id"    ) var id    : String? = null,

@@ -64,7 +64,7 @@ fun DeviceCard(name: String, type: String) {
             ) {
             }
             Icon(painter = painterResource( getDrawableForDeviceType(type)),
-                contentDescription = "h",
+                contentDescription = "device",
                 Modifier.size(58.dp),
                 tint = MaterialTheme.colorScheme.primary )
             TitleDeviceCard(text = name)

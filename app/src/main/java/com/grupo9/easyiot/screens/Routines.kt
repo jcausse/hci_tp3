@@ -47,6 +47,7 @@ fun RoutinesScreen(
             SuccessRoutineScreen(routinesState.get.result)
         }
         is RoutinesState.Error -> {
+            Text(text = routinesState.message)
             ErrorRoutineScreen()
         }
     }

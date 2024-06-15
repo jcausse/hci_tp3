@@ -24,7 +24,7 @@ class RoutinesViewModel : ViewModel() {
                 print(result)
                 RoutinesState.Success(result)
             }catch (e: Exception){
-                RoutinesState.Error
+                RoutinesState.Error("Unexpected error: ${e.message}")
             }
         }
 
@@ -36,7 +36,7 @@ sealed interface RoutinesState{
     //success
     data class Success(val get: Routines) : RoutinesState
     //error
-    data object Error : RoutinesState
+    data class Error(val message: String) : RoutinesState
     // loading
     data object Loading : RoutinesState
 

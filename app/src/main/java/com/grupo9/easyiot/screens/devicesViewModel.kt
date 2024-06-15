@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.grupo9.easyiot.model.device.Devices
 import com.grupo9.easyiot.network.DeviceApi
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class DevicesViewModel : ViewModel() {
     var devicesState: DevicesState by mutableStateOf(DevicesState.Loading)
@@ -21,13 +22,15 @@ class DevicesViewModel : ViewModel() {
             devicesState = DevicesState.Loading
             devicesState = try {
                 val result = DeviceApi.retorfitService.getDeviceList()
-                print(result)
                 DevicesState.Success(result)
-            }catch (e: Exception){
-                DevicesState.Error
+            } catch (e: IOException) {
+                println("Network error: ${e.message}")
+                DevicesState.Error("Network error: ${e.message}")
+            } catch (e: Exception) {
+                println("Unexpected error: ${e.message}")
+                DevicesState.Error("Unexpected error: ${e.message}")
             }
         }
-
     }
 }
 
@@ -36,13 +39,8 @@ sealed interface DevicesState{
     //success
     data class Success(val get: Devices) : DevicesState
     //error
-    data object Error : DevicesState
+    data class Error(val message: String) : DevicesState
     // loading
     data object Loading : DevicesState
 
-}
-
-fun main(){
-    val devs = DevicesViewModel()
-    devs.getDevices()
 }

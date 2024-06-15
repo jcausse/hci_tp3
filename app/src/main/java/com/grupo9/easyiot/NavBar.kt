@@ -4,11 +4,9 @@ package com.grupo9.easyiot
 
 import android.content.res.Configuration
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.grupo9.easyiot.screens.DevicesScreen
+import com.grupo9.easyiot.screens.DevicesViewModel
 import com.grupo9.easyiot.screens.RoutinesScreen
 import com.grupo9.easyiot.screens.RoutinesViewModel
 
@@ -33,7 +32,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     var currentDirection by rememberSaveable { mutableStateOf(NavIcons.DASHBOARD) }
     //ViewModels of all the screens
     val routinesViewModel: RoutinesViewModel = viewModel()
-
+    val devicesViewModel: DevicesViewModel = viewModel()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -66,9 +65,9 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     ){
 
         if (isLandscape) {
-            LandscapeContent(currentDirection, routinesViewModel)
+            LandscapeContent(currentDirection, routinesViewModel, devicesViewModel)
         } else {
-            PortraitContent(currentDirection, routinesViewModel)
+            PortraitContent(currentDirection, routinesViewModel, devicesViewModel)
         }
 
     }
@@ -103,18 +102,18 @@ fun NavigationScaffold() {
 }
 */
 @Composable
-fun PortraitContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel) {
+fun PortraitContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
     when (currentDirection) {
-        NavIcons.DEVICES -> DevicesScreen()
+        NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
         NavIcons.DASHBOARD -> DashboardScreen()
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }
 }
 
 @Composable
-fun LandscapeContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel) {
+fun LandscapeContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
     when (currentDirection) {
-        NavIcons.DEVICES -> DevicesScreen()
+        NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
         NavIcons.DASHBOARD -> DashboardScreen()
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }

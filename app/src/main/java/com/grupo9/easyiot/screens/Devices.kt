@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -248,18 +249,41 @@ val kodchasan = FontFamily(
     Font(R.font.kodchasan_bold, FontWeight.Bold),
 )
 
-@Preview(showBackground = true)
 @Composable
-fun DevicesScreen(
+fun DevicesScreen( devicesState: DevicesState
 ){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center, // Center vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-    ) {
-        Title(text = "Devices")
-        CardGridDev()
+    when ( devicesState ){
+        is DevicesState.Loading -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center, // Center vertically
+                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+            ) {
+                Title(text = "Devices")
+                CardGridDev()
+            }
+        }
+        is DevicesState.Success -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center, // Center vertically
+                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+            ) {
+                Title(text = "Devices")
+                CardGridDev()
+            }
+        }
+        is DevicesState.Error -> {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center, // Center vertically
+                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+            ) {
+                Text(text = devicesState.message)
+            }
+        }
     }
+
 }
 @Composable
 fun CardGridDev() {

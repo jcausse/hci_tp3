@@ -27,7 +27,7 @@ val kodchasan = FontFamily(
 )
 
 private val deviceTypeToDrawable = mapOf(
-    "fridge" to R.drawable.fridge,
+    "refrigerator" to R.drawable.fridge,
     "faucet" to R.drawable.faucet,
     "door" to R.drawable.door,
     "blinds" to R.drawable.blinds,

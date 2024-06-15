@@ -18,28 +18,219 @@ import androidx.compose.ui.unit.dp
 import com.grupo9.easyiot.DeviceCard
 import com.grupo9.easyiot.R
 import com.grupo9.easyiot.model.device.DeviceResult
-import com.grupo9.easyiot.model.device.State
-import com.grupo9.easyiot.model.device.Type
-import com.grupo9.easyiot.model.routines.Meta
+import com.grupo9.easyiot.model.device.DeviceResultSerializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
 
-val devices = listOf(
-    // Example devices based on the provided JSON data.
-    DeviceResult(
-        id = "066643a46c8b7579",
-        name = "adasda",
-        type = Type(id = "go46xmbqeomjrsjr", name = "lamp", powerUsage = 15),
-        state = State.LampState(status = "off", color = "00FF00", brightness = 20),
-        meta = Meta(description = "No house", weekdays = "No room")
-    ),
-    DeviceResult(
-        id = "5837e303e602e901",
-        name = "hgjhgj",
-        type = Type(id = "lsf78ly0eqrjbz91", name = "door", powerUsage = 350),
-        state = State.DoorState(status = "closed", lock = "locked"),
-        meta = Meta(description = "No house", weekdays = "No room")
-    ),
-    // Add other devices based on the provided JSON data...
-)
+const val jsonString = """
+     [
+    {
+      "id": "066643a46c8b7579",
+      "name": "adasda",
+      "type": {
+        "id": "go46xmbqeomjrsjr",
+        "name": "lamp",
+        "powerUsage": 15
+      },
+      "state": {
+        "status": "off",
+        "color": "00FF00",
+        "brightness": 20
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "5837e303e602e901",
+      "name": "hgjhgj",
+      "type": {
+        "id": "lsf78ly0eqrjbz91",
+        "name": "door",
+        "powerUsage": 350
+      },
+      "state": {
+        "status": "closed",
+        "lock": "locked"
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "6790ed0d1fa9feba",
+      "name": "okjljkljl",
+      "type": {
+        "id": "lsf78ly0eqrjbz91",
+        "name": "door",
+        "powerUsage": 350
+      },
+      "state": {
+        "status": "closed",
+        "lock": "unlocked"
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "787056f70df70b3c",
+      "name": "blinds 1",
+      "type": {
+        "id": "eu0v2xgprrhhg41g",
+        "name": "blinds",
+        "powerUsage": 350
+      },
+      "state": {
+        "status": "opened",
+        "level": 75,
+        "currentLevel": 0
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "90c1351dd516e0e6",
+      "name": "asdasd",
+      "type": {
+        "id": "c89b94e8581855bc",
+        "name": "speaker",
+        "powerUsage": 20
+      },
+      "state": {
+        "status": "playing",
+        "volume": 3,
+        "genre": "classical",
+        "song": {
+          "title": "Piano Sonata No. 14 in C-Sharp Minor, Op. 27 No. 2",
+          "artist": "Ludwig Van Beethoven, Louis Lortie",
+          "album": "Beethoven: Complete Piano Sonatas",
+          "duration": "7:22",
+          "progress": "3:37"
+        }
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "91cb466207273518",
+      "name": "kopkopk",
+      "type": {
+        "id": "rnizejqr2di0okho",
+        "name": "refrigerator",
+        "powerUsage": 90
+      },
+      "state": {
+        "freezerTemperature": -15,
+        "temperature": 7,
+        "mode": "vacation"
+      },
+      "room": {
+        "id": "e052d06d575ad7fd",
+        "name": "kjhknkm ",
+        "home": {
+          "id": "4cad1006ae058ab0",
+          "name": "hkjk"
+        }
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "9cb38bd969eb0edd",
+      "name": "asdas",
+      "type": {
+        "id": "dbrlsh7o5sn8ur4i",
+        "name": "faucet",
+        "powerUsage": 15
+      },
+      "state": {
+        "status": "opened"
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "b31ee5b8c5f6fe00",
+      "name": "dasdasd",
+      "type": {
+        "id": "ofglvd9gqx8yfl3l",
+        "name": "vacuum",
+        "powerUsage": 300
+      },
+      "state": {
+        "status": "docked",
+        "mode": "mop",
+        "batteryLevel": 100,
+        "location": {
+          "id": "e052d06d575ad7fd",
+          "name": "kjhknkm "
+        }
+      },
+      "room": {
+        "id": "e052d06d575ad7fd",
+        "name": "kjhknkm ",
+        "home": {
+          "id": "4cad1006ae058ab0",
+          "name": "hkjk"
+        }
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "cccee25d8d6ce19f",
+      "name": "door 1",
+      "type": {
+        "id": "lsf78ly0eqrjbz91",
+        "name": "door",
+        "powerUsage": 350
+      },
+      "state": {
+        "status": "closed",
+        "lock": "unlocked"
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    },
+    {
+      "id": "d066351aa624fdec",
+      "name": "dfsdf",
+      "type": {
+        "id": "eu0v2xgprrhhg41g",
+        "name": "blinds",
+        "powerUsage": 350
+      },
+      "state": {
+        "status": "closed",
+        "level": 50,
+        "currentLevel": 50
+      },
+      "meta": {
+        "weekdays": "No house",
+        "description": "No room"
+      }
+    }
+  ]
+"""
+
+//mover a device api service
+val jsonArray = Json.parseToJsonElement(com.grupo9.easyiot.model.device.jsonString).jsonArray
 
 
 
@@ -69,6 +260,13 @@ fun CardGridDev() {
             .fillMaxSize()
             .padding(10.dp)
     ) {
+
+        //mover a device api service
+        val devices = mutableListOf<DeviceResult>()
+        for(element in jsonArray){
+            devices.add(Json.decodeFromString(DeviceResultSerializer,element.toString()))
+        }
+
         itemsIndexed(devices) { index, device ->
             DeviceCard(name = device.name, type = device.type.name, idx = index+1,
                 onClick = {

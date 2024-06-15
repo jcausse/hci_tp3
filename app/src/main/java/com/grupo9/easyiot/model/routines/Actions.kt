@@ -1,8 +1,10 @@
 package com.grupo9.easyiot.model.routines
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 
+@Serializable
 data class Actions (
 
   @SerialName("device"     ) var device     : Device,

@@ -1,5 +1,6 @@
 package com.grupo9.easyiot
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,12 +42,13 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 @Composable
-fun DeviceCard(name: String, type: String) {
+fun DeviceCard(name: String, type: String, idx: Int, onClick: () -> Unit ) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .padding(10.dp)
             .width(160.dp)
-            .height(160.dp),
+            .height(160.dp)
+            .clickable(onClick = onClick),
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
             contentColor = MaterialTheme.colorScheme.primary),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)

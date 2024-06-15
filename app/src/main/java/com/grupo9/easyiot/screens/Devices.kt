@@ -22,7 +22,7 @@ import com.grupo9.easyiot.model.device.DeviceResultSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 
-const val jsonString = """
+val jsonString = """
      [
     {
       "id": "066643a46c8b7579",
@@ -38,8 +38,9 @@ const val jsonString = """
         "brightness": 20
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -55,8 +56,9 @@ const val jsonString = """
         "lock": "locked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -72,8 +74,9 @@ const val jsonString = """
         "lock": "unlocked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -90,8 +93,9 @@ const val jsonString = """
         "currentLevel": 0
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -115,8 +119,9 @@ const val jsonString = """
         }
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -140,9 +145,10 @@ const val jsonString = """
           "name": "hkjk"
         }
       },
-      "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+     "meta": {
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -157,8 +163,9 @@ const val jsonString = """
         "status": "opened"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -187,8 +194,9 @@ const val jsonString = """
         }
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -204,8 +212,9 @@ const val jsonString = """
         "lock": "unlocked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -222,13 +231,13 @@ const val jsonString = """
         "currentLevel": 50
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     }
   ]
 """
-
 //mover a device api service
 val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
 

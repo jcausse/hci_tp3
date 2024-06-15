@@ -1,6 +1,4 @@
 package com.grupo9.easyiot.model.device
-
-import com.grupo9.easyiot.model.routines.Meta
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.descriptors.SerialDescriptor

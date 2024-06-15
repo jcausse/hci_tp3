@@ -1,14 +1,12 @@
 package com.grupo9.easyiot.model.device
-
-import com.grupo9.easyiot.model.routines.Meta
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/* FOR TESTING-----------------------------
+/*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
- ---------------------------------------*/
+*/
 
 @Serializable
 data class DeviceResult (
@@ -19,7 +17,7 @@ data class DeviceResult (
   @SerialName("meta"  ) var meta  : Meta
 )
 
-/* TESTING --------------------
+/*
 // Example JSON string
 val jsonString = """
      [
@@ -37,8 +35,9 @@ val jsonString = """
         "brightness": 20
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -54,8 +53,9 @@ val jsonString = """
         "lock": "locked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -71,8 +71,9 @@ val jsonString = """
         "lock": "unlocked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -89,8 +90,9 @@ val jsonString = """
         "currentLevel": 0
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -114,8 +116,9 @@ val jsonString = """
         }
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -139,9 +142,10 @@ val jsonString = """
           "name": "hkjk"
         }
       },
-      "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+     "meta": {
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -156,8 +160,9 @@ val jsonString = """
         "status": "opened"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -186,8 +191,9 @@ val jsonString = """
         }
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -203,8 +209,9 @@ val jsonString = """
         "lock": "unlocked"
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     },
     {
@@ -221,12 +228,14 @@ val jsonString = """
         "currentLevel": 50
       },
       "meta": {
-        "weekdays": "No house",
-        "description": "No room"
+        "house": "No house",
+        "room": "No room",
+        "fav": true
       }
     }
   ]
 """
+
 
 fun main() {
   // Example instances of DeviceResult
@@ -235,7 +244,7 @@ fun main() {
     "adasda",
     Type("go46xmbqeomjrsjr", "lamp", 15),
     State.LampState("off", "00FF00", 20),
-    Meta("No house", "No room")
+    Meta("No house", "No room",true)
   )
 
   val doorDevice = DeviceResult(
@@ -243,7 +252,7 @@ fun main() {
     "hgjhgj",
     Type("lsf78ly0eqrjbz91", "door", 350),
     State.DoorState("closed", "locked"),
-    Meta("No house", "No room")
+    Meta("No house", "No room",false)
   )
 
   // Serialize each device to JSON
@@ -272,5 +281,6 @@ fun main() {
     println("Error parsing JSON: ${e.message}")
   }
 }
+
 
  */

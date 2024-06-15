@@ -38,9 +38,7 @@ fun DevicesScreen( devicesState: DevicesState
             ErrorScreen(devicesState.message)
         }
     }
-
 }
-
 
 @Composable
 fun LoadingScreen(){
@@ -52,7 +50,6 @@ fun LoadingScreen(){
         Text(text =  "loading...")
     }
 }
-
 @Composable
 fun ErrorScreen(message: String){
     Column(
@@ -74,7 +71,6 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>){
         CardGridDev(devices)
     }
 }
-
 @Composable
 fun CardGridDev(devices : ArrayList<DeviceResult>) {
     LazyVerticalGrid(

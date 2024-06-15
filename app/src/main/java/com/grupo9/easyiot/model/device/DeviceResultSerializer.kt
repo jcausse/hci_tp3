@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -16,7 +17,7 @@ object DeviceResultSerializer : KSerializer<DeviceResult> {
         element<String>("id")
         element<String>("name")
         element<Type>("type")
-        element<State>("state")
+        element<JsonElement>("state")
         element<Meta>("meta")
     }
 

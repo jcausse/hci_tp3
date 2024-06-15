@@ -17,7 +17,8 @@ private val httpLoggingInterceptor = HttpLoggingInterceptor()
 private val okHttpClient = OkHttpClient.Builder()
     .addInterceptor(httpLoggingInterceptor).build()
 
-private val json = Json { ignoreUnknownKeys = true }
+private val json = Json { ignoreUnknownKeys = true
+}
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -25,7 +26,7 @@ private val retrofit = Retrofit.Builder()
 
 interface DeviceApiService {
     @GET("devices")
-    suspend fun getDeviceList () : Devices
+    suspend fun getDeviceList() : Devices
 }
 
 object DeviceApi {

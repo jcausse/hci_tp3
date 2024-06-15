@@ -3,9 +3,12 @@ package com.grupo9.easyiot.model.device
 import com.grupo9.easyiot.model.routines.Meta
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
+/* FOR TESTING-----------------------------
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
+ ---------------------------------------*/
 
 @Serializable
 data class DeviceResult (
@@ -16,6 +19,7 @@ data class DeviceResult (
   @SerialName("meta"  ) var meta  : Meta
 )
 
+/* TESTING --------------------
 // Example JSON string
 val jsonString = """
      [
@@ -225,6 +229,30 @@ val jsonString = """
 """
 
 fun main() {
+  // Example instances of DeviceResult
+  val lampDevice = DeviceResult(
+    "066643a46c8b7579",
+    "adasda",
+    Type("go46xmbqeomjrsjr", "lamp", 15),
+    State.LampState("off", "00FF00", 20),
+    Meta("No house", "No room")
+  )
+
+  val doorDevice = DeviceResult(
+    "5837e303e602e901",
+    "hgjhgj",
+    Type("lsf78ly0eqrjbz91", "door", 350),
+    State.DoorState("closed", "locked"),
+    Meta("No house", "No room")
+  )
+
+  // Serialize each device to JSON
+  val lampJson = Json.encodeToString(DeviceResultSerializer, lampDevice)
+  val doorJson = Json.encodeToString(DeviceResultSerializer, doorDevice)
+
+  println("Serialized Lamp Device: $lampJson")
+  println("Serialized Door Device: $doorJson")
+
   try {
 
     val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
@@ -244,3 +272,5 @@ fun main() {
     println("Error parsing JSON: ${e.message}")
   }
 }
+
+ */

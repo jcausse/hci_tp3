@@ -230,7 +230,7 @@ const val jsonString = """
 """
 
 //mover a device api service
-val jsonArray = Json.parseToJsonElement(com.grupo9.easyiot.model.device.jsonString).jsonArray
+val jsonArray = Json.parseToJsonElement(jsonString).jsonArray
 
 
 

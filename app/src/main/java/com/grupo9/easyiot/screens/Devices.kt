@@ -277,12 +277,12 @@ fun CardGridDev() {
         }
 
         itemsIndexed(devices) { index, device ->
-            DeviceCard(name = device.name, type = device.type.name, idx = index+1,
+            DeviceCard(name = device.name, type = device.type.name,
                 onClick = {
                 // Handle the click event here
                     // funcion que lleva al expanded device view
                     // y carga el state
-                println("Clicked on ${device.name}")
+                println("Clicked on ${index}")
             })
         }
     }

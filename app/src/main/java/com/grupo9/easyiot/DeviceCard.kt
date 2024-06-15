@@ -42,7 +42,7 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 @Composable
-fun DeviceCard(name: String, type: String, idx: Int, onClick: () -> Unit ) {
+fun DeviceCard(name: String, type: String, onClick: () -> Unit ) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .padding(10.dp)

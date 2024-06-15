@@ -29,30 +29,52 @@ fun DevicesScreen( devicesState: DevicesState
 ){
     when ( devicesState ){
         is DevicesState.Loading -> {
-
+            LoadingScreen()
         }
         is DevicesState.Success -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center, // Center vertically
-                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-            ) {
-                Title(text = "Devices")
-                CardGridDev(devicesState.get.result)
-            }
+            SuccessScreen(devicesState.get.result)
         }
         is DevicesState.Error -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center, // Center vertically
-                horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-            ) {
-                Text(text = devicesState.message)
-            }
+            ErrorScreen(devicesState.message)
         }
     }
 
 }
+
+
+@Composable
+fun LoadingScreen(){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center, // Center vertically
+        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+    ) {
+        Text(text =  "loading...")
+    }
+}
+
+@Composable
+fun ErrorScreen(message: String){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center, // Center vertically
+        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+    ) {
+        Text(text =  message)
+    }
+}
+@Composable
+fun SuccessScreen(devices : ArrayList<DeviceResult>){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center, // Center vertically
+        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+    ) {
+        Title(text = "Devices")
+        CardGridDev(devices)
+    }
+}
+
 @Composable
 fun CardGridDev(devices : ArrayList<DeviceResult>) {
     LazyVerticalGrid(

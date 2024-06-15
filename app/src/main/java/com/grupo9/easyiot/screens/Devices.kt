@@ -25,8 +25,7 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen( devicesState: DevicesState
-){
+fun DevicesScreen( devicesState: DevicesState){
     when ( devicesState ){
         is DevicesState.Loading -> {
             LoadingScreen()

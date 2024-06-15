@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class RoutinesViewModel : ViewModel() {
     var routinesState: RoutinesState by mutableStateOf(RoutinesState.Loading)
     private set
+    var executeResult: Boolean by mutableStateOf(true)
 
     init {
        getRoutines()
@@ -28,6 +29,16 @@ class RoutinesViewModel : ViewModel() {
             }
         }
 
+    }
+
+    fun executeRoutine(routineId: String){
+        viewModelScope.launch {
+            try {
+                executeResult = RoutineApi.retorfitService.executeRoutine(routineId)
+            }catch (e: Exception){
+                RoutinesState.Error("Unexpected error: ${e.message}")
+            }
+        }
     }
 }
 

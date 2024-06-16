@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -22,14 +21,14 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -120,22 +119,7 @@ fun RoutineCard(id: String, name: String, time: String, description: String, act
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
                 CardTitle(name)
-                Button(
-                    onClick = {
-                    }
-                ) {
-                    PlayRoutine(id = id)
-                }
-                    Icon(
-                        imageVector = Icons.Rounded.PlayArrow,
-                        contentDescription = "Play",
-                        modifier = Modifier
-                            .padding(32.dp)
-                            .clickable {
-
-                            }
-                    )
-
+                ClickableIcon(id, name)
             }
             Text(
                 modifier = Modifier.padding(16.dp),
@@ -145,6 +129,7 @@ fun RoutineCard(id: String, name: String, time: String, description: String, act
         }
     }
 }
+
 
 @Composable
 fun ScrollableList(actions: ArrayList<Actions>) {
@@ -184,57 +169,35 @@ fun CardTitle ( text: String ){
 
 
 @Composable
-fun PlayRoutine(id: String, routineViewModel: RoutinesViewModel = RoutinesViewModel()){
-    val openAlertDialog = remember { mutableStateOf(false) }
-    routineViewModel.executeRoutine(id)
-    AlertDialogExample(
-        onDismissRequest = { openAlertDialog.value = false },
-        onConfirmation = {
-            openAlertDialog.value = false
-        },
-        dialogTitle = "Routine executed",
-        dialogText = if (routineViewModel.executeResult) "Routine executed correctly" else "Routine failed",
-        icon = Icons.Default.Info
+fun ClickableIcon(id: String, name: String) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Icon(
+        imageVector = Icons.Rounded.PlayArrow,
+        contentDescription = "Play",
+        modifier = Modifier
+            .padding(32.dp)
+            .clickable { showDialog = true }
     )
+
+    if (showDialog) {
+        PlayRoutine(id = id, name, onDismiss = { showDialog = false })
+    }
 }
 
 @Composable
-fun AlertDialogExample(
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    dialogTitle: String,
-    dialogText: String,
-    icon: ImageVector,
-) {
+fun PlayRoutine(id: String, name: String, onDismiss: () -> Unit, routinesViewModel: RoutinesViewModel = RoutinesViewModel()) {
+
+    routinesViewModel.executeRoutine(id)
+    val executeResult  = routinesViewModel.executeResult
+
     AlertDialog(
-        icon = {
-            Icon(icon, contentDescription = "Example Icon")
-        },
-        title = {
-            Text(text = dialogTitle)
-        },
-        text = {
-            Text(text = dialogText)
-        },
-        onDismissRequest = {
-            onDismissRequest()
-        },
+        onDismissRequest = onDismiss,
+        title = { Text(name) },
+        text = { Text(if ( executeResult ) "Executed Routine Successfully" else "Error executing routine") },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirmation()
-                }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
-            ) {
-                Text("Dismiss")
+            Button(onClick = onDismiss) {
+                Text("OK")
             }
         }
     )

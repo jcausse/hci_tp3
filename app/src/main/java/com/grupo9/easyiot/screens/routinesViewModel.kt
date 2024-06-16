@@ -33,10 +33,10 @@ class RoutinesViewModel : ViewModel() {
 
     fun executeRoutine(routineId: String){
         viewModelScope.launch {
-            try {
-                executeResult = RoutineApi.retorfitService.executeRoutine(routineId)
+            executeResult = try {
+                RoutineApi.retorfitService.executeRoutine(routineId)
             }catch (e: Exception){
-                RoutinesState.Error("Unexpected error: ${e.message}")
+                false
             }
         }
     }

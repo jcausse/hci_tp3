@@ -20,7 +20,6 @@ object DeviceResultSerializer : KSerializer<DeviceResult> {
         element<JsonElement>("state")
         element<Meta>("meta")
     }
-
     override fun serialize(encoder: Encoder, value: DeviceResult) {
         val composite = encoder.beginStructure(descriptor)
         composite.encodeStringElement(descriptor, 0, value.id)

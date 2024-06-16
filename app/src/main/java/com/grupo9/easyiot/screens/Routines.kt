@@ -14,23 +14,28 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.R
+import com.grupo9.easyiot.model.routines.Actions
 import com.grupo9.easyiot.model.routines.RoutineResult
-
 
 @Composable
 fun RoutinesScreen(
@@ -38,13 +43,12 @@ fun RoutinesScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ){
-
     when ( routinesState ){
         is RoutinesState.Loading -> {
-            LoadingRoutineScreen()
+            LoadingRoutineScreen( modifier, contentPadding)
         }
         is RoutinesState.Success -> {
-            SuccessRoutineScreen(routinesState.get.result)
+            SuccessRoutineScreen(routinesState.get.result, modifier, contentPadding)
         }
         is RoutinesState.Error -> {
             Text(text = routinesState.message)
@@ -53,44 +57,54 @@ fun RoutinesScreen(
     }
 }
 
+
+@Composable
+fun RoutinesScreenPreview(){
+    RoutinesScreen(routinesState = RoutinesViewModel().routinesState )
+}
+
 @Composable
 fun ErrorRoutineScreen() {
     Text(text = "Error")
 }
-
 @Composable
-fun LoadingRoutineScreen(){
-    Text(text ="loading")
+fun LoadingRoutineScreen(modifier: Modifier, contentPadding: PaddingValues){
+    Text(text ="loading", modifier = modifier.padding(contentPadding))
 }
 
 @Composable
-fun SuccessRoutineScreen(routines: List<RoutineResult>){
+fun SuccessRoutineScreen(routines: List<RoutineResult>, modifier: Modifier, contentPadding: PaddingValues){
     Column (
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.padding(contentPadding)
     ){
         Title(text = stringResource(id = R.string.routines))
-        for ( routine in routines ){
-           RoutineCard(name = routine.name, time = routine.meta.weekdays, description = routine.meta.description )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            items(routines) { routine ->
+                RoutineCard(
+                    id = routine.id,
+                    name = routine.name,
+                    time = routine.meta.weekdays,
+                    description = routine.meta.description,
+                    routine.actions
+                )
+            }
         }
 
     }
 }
-/*
-@Preview
-@Composable
-fun RoutinesScreenPreview(){
-    RoutinesScreen()
-}
-*/
 
 
 @Composable
-fun RoutineCard(name: String, time: String, description: String) {
+fun RoutineCard(id: String, name: String, time: String, description: String, actions: ArrayList<Actions>) {
     Card(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-            .height(200.dp),
+            .height(300.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White, contentColor = MaterialTheme.colorScheme.primary),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -104,21 +118,29 @@ fun RoutineCard(name: String, time: String, description: String) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                Title(name)
-                Icon(
-                    imageVector = Icons.Rounded.PlayArrow,
-                    contentDescription = "Play",
-                    modifier = Modifier
-                        .padding(32.dp)
-                        .clickable {
-                            playRoutine()
-                        }
-                )
+                CardTitle(name)
+                ClickableIcon(id, name)
             }
             Text(
                 modifier = Modifier.padding(16.dp),
                 text = description)
+            ScrollableList(actions)
             Text(text = time, Modifier.align(Alignment.End))
+        }
+    }
+}
+
+
+@Composable
+fun ScrollableList(actions: ArrayList<Actions>) {
+    LazyColumn (
+        modifier = Modifier.height(100.dp)
+    ){
+        items(actions) { action ->
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = "${action.device.name} -> ${action.actionName}"
+            )
         }
     }
 }
@@ -134,21 +156,49 @@ fun Title ( text: String ){
         fontWeight = FontWeight.Bold
     )
 }
-@Preview(showBackground = true)
+
 @Composable
-fun CardList() {
-    LazyColumn(
+fun CardTitle ( text: String ){
+    Text(
+        modifier = Modifier.padding(5.dp),
+        fontSize = 24.sp,
+        color = MaterialTheme.colorScheme.primary,
+        text = text
+    )
+}
+
+
+@Composable
+fun ClickableIcon(id: String, name: String) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Icon(
+        imageVector = Icons.Rounded.PlayArrow,
+        contentDescription = "Play",
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items((1..20).toList()) { index ->
-            RoutineCard(name = "A mimir", time = "LMMJVSD", description = "Zzzzzz" )
-        }
+            .padding(32.dp)
+            .clickable { showDialog = true }
+    )
+
+    if (showDialog) {
+        PlayRoutine(id = id, name, onDismiss = { showDialog = false })
     }
 }
 
-fun playRoutine(){
-    //TODO
+@Composable
+fun PlayRoutine(id: String, name: String, onDismiss: () -> Unit, routinesViewModel: RoutinesViewModel = RoutinesViewModel()) {
 
+    routinesViewModel.executeRoutine(id)
+    val executeResult  = routinesViewModel.executeResult
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(name) },
+        text = { Text(if ( executeResult ) "Executed Routine Successfully" else "Error executing routine") },
+        confirmButton = {
+            Button(onClick = onDismiss) {
+                Text("OK")
+            }
+        }
+    )
 }

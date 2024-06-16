@@ -8,7 +8,7 @@ data class Device (
 
   @SerialName("id"   ) var id   : String,
   @SerialName("name" ) var name : String,
-  @SerialName("type" ) var type : Type,
-  @SerialName("routinemeta" ) var meta : Meta
+  @SerialName("type" ) var type : Type
+  //@SerialName("routinemeta" ) var meta : Meta
 
 )

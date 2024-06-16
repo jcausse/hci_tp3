@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class Meta(
     @SerialName("house" ) var house : String = "",
     @SerialName("room" ) var room : String = "",
-    @SerialName("fav" ) var fav : Boolean
+    @SerialName("fav" ) var fav : Boolean = false
 )

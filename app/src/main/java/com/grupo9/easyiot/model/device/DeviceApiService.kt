@@ -9,6 +9,6 @@ import kotlinx.serialization.json.Json
 @Serializable
 data class Devices (
 
-  @SerialName("result" ) var result : List<DeviceResult> = emptyList()
+  @SerialName("result" ) var result : ArrayList<DeviceResult> = arrayListOf()
 
 )

@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class State {
   @Serializable
-  @SerialName("lamp")
   data class LampState(
     @SerialName("status") val status: String,
     @SerialName("color") val color: String,
@@ -14,14 +13,12 @@ sealed class State {
   ) : State()
 
   @Serializable
-  @SerialName("door")
   data class DoorState(
     @SerialName("status") val status: String,
     @SerialName("lock") val lock: String
   ) : State()
 
   @Serializable
-  @SerialName("blinds")
   data class BlindsState(
     @SerialName("status") val status: String,
     @SerialName("level") val level: Int,
@@ -29,7 +26,6 @@ sealed class State {
   ) : State()
 
   @Serializable
-  @SerialName("speaker")
   data class SpeakerState(
     @SerialName("status") val status: String,
     @SerialName("volume") val volume: Int,
@@ -47,7 +43,6 @@ sealed class State {
   }
 
   @Serializable
-  @SerialName("refrigerator")
   data class RefrigeratorState(
     @SerialName("freezerTemperature") val freezerTemperature: Int,
     @SerialName("temperature") val temperature: Int,
@@ -55,13 +50,11 @@ sealed class State {
   ) : State()
 
   @Serializable
-  @SerialName("faucet")
   data class FaucetState(
     @SerialName("status") val status: String
   ) : State()
 
   @Serializable
-  @SerialName("vacuum")
   data class VacuumState(
     @SerialName("status") val status: String,
     @SerialName("mode") val mode: String,

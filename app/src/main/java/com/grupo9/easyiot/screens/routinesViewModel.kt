@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.grupo9.easyiot.model.routines.Routines
 import com.grupo9.easyiot.network.RoutineApi
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class RoutinesViewModel : ViewModel() {
     var routinesState: RoutinesState by mutableStateOf(RoutinesState.Loading)
@@ -24,7 +25,10 @@ class RoutinesViewModel : ViewModel() {
                 val result = RoutineApi.retorfitService.getRoutineList()
                 print(result)
                 RoutinesState.Success(result)
-            }catch (e: Exception){
+            } catch (e: IOException) {
+                println("Network error: ${e.message}")
+                RoutinesState.Error("Network error: ${e.message}")
+            } catch (e: Exception){
                 RoutinesState.Error("Unexpected error: ${e.message}")
             }
         }

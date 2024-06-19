@@ -1,8 +1,7 @@
 package com.grupo9.easyiot
 
-
-
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +20,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.grupo9.easyiot.screens.DashboardScreen
+import com.grupo9.easyiot.screens.DashboardViewModel
 import com.grupo9.easyiot.screens.DevicesScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
 import com.grupo9.easyiot.screens.RoutinesScreen
@@ -33,6 +34,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     //ViewModels of all the screens
     val routinesViewModel: RoutinesViewModel = viewModel()
     val devicesViewModel: DevicesViewModel = viewModel()
+    val dashboardViewModel: DashboardViewModel = viewModel()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -65,17 +67,12 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     ){
 
         if (isLandscape) {
-            LandscapeContent(currentDirection, routinesViewModel, devicesViewModel)
+            LandscapeContent(currentDirection, routinesViewModel, devicesViewModel, dashboardViewModel)
         } else {
-            PortraitContent(currentDirection, routinesViewModel, devicesViewModel)
+            PortraitContent(currentDirection, routinesViewModel, devicesViewModel, dashboardViewModel)
         }
 
     }
-}
-
-@Composable
-fun DashboardScreen() {
-    Text(text = "DashBoard")
 }
 
 @Preview(showBackground = true)
@@ -87,7 +84,7 @@ fun BottomNavigationPreview() {
 
 enum class NavIcons (
     @StringRes val label: Int,
-    val icon: Int,
+    @DrawableRes val icon: Int,
     @StringRes val contentDescriptor: Int
 ){
     DEVICES(R.string.bottom_navigation_devices, R.drawable.devices, R.string.bottom_navigation_devices),
@@ -102,19 +99,29 @@ fun NavigationScaffold() {
 }
 */
 @Composable
-fun PortraitContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
+fun PortraitContent(
+    currentDirection: NavIcons,
+    routinesViewModel: RoutinesViewModel,
+    devicesViewModel: DevicesViewModel,
+    dashboardViewModel: DashboardViewModel
+) {
     when (currentDirection) {
         NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen()
+        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.dashboardState)
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }
 }
 
 @Composable
-fun LandscapeContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
+fun LandscapeContent(
+    currentDirection: NavIcons,
+    routinesViewModel: RoutinesViewModel,
+    devicesViewModel: DevicesViewModel,
+    dashboardViewModel: DashboardViewModel
+) {
     when (currentDirection) {
         NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen()
+        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.dashboardState)
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }
 }

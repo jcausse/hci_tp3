@@ -30,15 +30,15 @@ sealed class State {
     @SerialName("status") val status: String,
     @SerialName("volume") val volume: Int,
     @SerialName("genre") val genre: String,
-    @SerialName("song") val song: Song
+    @SerialName("song") val song: Song = Song()
   ) : State() {
     @Serializable
     data class Song(
-      @SerialName("title") val title: String,
-      @SerialName("artist") val artist: String,
-      @SerialName("album") val album: String,
-      @SerialName("duration") val duration: String,
-      @SerialName("progress") val progress: String
+      @SerialName("title") val title: String = "Unknown",
+      @SerialName("artist") val artist: String = "Unknown",
+      @SerialName("album") val album: String = "Unknown",
+      @SerialName("duration") val duration: String = "00:00",
+      @SerialName("progress") val progress: String = "00:00"
     )
   }
 

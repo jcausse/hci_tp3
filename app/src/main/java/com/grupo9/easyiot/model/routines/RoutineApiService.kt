@@ -8,3 +8,8 @@ data class Routines (
   @SerialName("result" ) var result : ArrayList<RoutineResult> = arrayListOf()
 
 )
+
+@Serializable
+data class ExtecuteResult(
+  @SerialName("result" ) var result : ArrayList<Boolean> = arrayListOf()
+)

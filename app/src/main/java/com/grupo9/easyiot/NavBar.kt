@@ -36,41 +36,41 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    NavigationSuiteScaffold(
-        navigationSuiteColors = NavigationSuiteDefaults.colors(
-            navigationBarContainerColor = MaterialTheme.colorScheme.primary
-        ),
-        navigationSuiteItems = {
-            NavIcons.entries.forEach {
-                item(
-                    icon = {
-                        Icon(
-                            painter = painterResource(id = it.icon),
-                            contentDescription = stringResource(id = it.contentDescriptor),
-                            tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+    if (isLandscape) {
+        LandscapeContent(currentDirection, routinesViewModel, devicesViewModel)
+    } else {
+        NavigationSuiteScaffold(
+            navigationSuiteColors = NavigationSuiteDefaults.colors(
+                navigationBarContainerColor = MaterialTheme.colorScheme.primary
+            ),
+            navigationSuiteItems = {
+                NavIcons.entries.forEach {
+                    item(
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = it.icon),
+                                contentDescription = stringResource(id = it.contentDescriptor),
+                                tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
 
-                        )
-                    },
-                    label = { Text(
-                        stringResource(id = it.label),
-                        color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                    )},
-                    selected = currentDirection == it,
-                    onClick = { currentDirection = it }
-                )
-            }
+                            )
+                        },
+                        label = { Text(
+                            stringResource(id = it.label),
+                            color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                        )},
+                        selected = currentDirection == it,
+                        onClick = { currentDirection = it }
+                    )
+                }
 
-        },
-        modifier = modifier
-    ){
-
-        if (isLandscape) {
-            LandscapeContent(currentDirection, routinesViewModel, devicesViewModel)
-        } else {
+            },
+            modifier = modifier
+        ){
             PortraitContent(currentDirection, routinesViewModel, devicesViewModel)
         }
-
     }
+
+
 }
 
 @Composable

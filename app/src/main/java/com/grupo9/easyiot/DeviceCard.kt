@@ -54,79 +54,55 @@ fun truncateText(text: String, maxLength: Int): String {
 
 @Composable
 fun getDevStatusToStr(state: State, isTablet: Boolean): String {
-    if(isTablet) {
-        return when (state) {
-            is State.RefrigeratorState -> {
-                "${stringResource(R.string.temperature)}: ${state.temperature} C\n" +
-                        "${stringResource(R.string.freezer_temperature)}: ${state.freezerTemperature} C\n" +
-                        "${stringResource(R.string.mode)}: ${state.mode}"
-            }
-            is State.LampState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n" +
-                        "${stringResource(R.string.lamp_color)}: ${state.color}\n" +
-                        "${stringResource(R.string.lamp_brightness)}: ${state.brightness}"
-            }
-            is State.VacuumState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n" +
-                        "${stringResource(R.string.mode)}: ${state.mode}\n" +
-                        "${stringResource(R.string.vacuum_battery_level)}: ${state.batteryLevel}%\n" +
-                        "${stringResource(R.string.vacuum_location)}: ${truncateText(state.location.name, 10)}"
-            }
-            is State.FaucetState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
-            }
-            is State.DoorState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n" +
-                        "${stringResource(R.string.door_lock)}: ${state.lock}"
-            }
-            is State.SpeakerState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n" +
-                        "${stringResource(R.string.speaker_song)}: ${truncateText(state.song.title, 30)}\n" +
-                        "${stringResource(R.string.speaker_artist)}: ${truncateText(state.song.artist, 16)}"
-            }
-            is State.BlindsState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n" +
-                        "${stringResource(R.string.blinds_level)}: ${state.currentLevel}%"
-            }
-            is State.DefaultState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
+    val baseString = StringBuilder()
+
+    when (state) {
+        is State.RefrigeratorState -> {
+            baseString.append(stringResource(R.string.temperature)).append(": ${state.temperature} C\n")
+            .append(stringResource(R.string.freezer_temperature)).append(": ${state.freezerTemperature} C\n")
+            if (isTablet) {
+                baseString.append(stringResource(R.string.mode)).append(": ${state.mode}")
             }
         }
-    } else {
-        return when (state) {
-            is State.RefrigeratorState -> {
-                "${stringResource(R.string.temperature)}: ${state.temperature} C\n${stringResource(R.string.freezer_temperature)}: ${state.freezerTemperature} C"
+        is State.LampState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            .append(stringResource(R.string.lamp_color)).append(": ${state.color}\n")
+            if (isTablet) {
+                baseString.append(stringResource(R.string.lamp_brightness)).append(": ${state.brightness}")
             }
-
-            is State.LampState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n${stringResource(R.string.lamp_color)}: ${state.color}"
+        }
+        is State.VacuumState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            if (isTablet) {
+                baseString.append(stringResource(R.string.mode)).append(": ${state.mode}\n")
+                .append(stringResource(R.string.vacuum_battery_level)).append(": ${state.batteryLevel}%\n")
+                .append(stringResource(R.string.vacuum_location)).append(": ${truncateText(state.location.name, 10)}")
             }
-
-            is State.VacuumState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
+        }
+        is State.FaucetState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}")
+        }
+        is State.DoorState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            .append(stringResource(R.string.door_lock)).append(": ${state.lock}")
+        }
+        is State.SpeakerState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            if (isTablet) {
+                baseString.append(stringResource(R.string.speaker_song)).append(": ${truncateText(state.song.title, 30)}\n")
+                .append(stringResource(R.string.speaker_artist)).append(": ${truncateText(state.song.artist, 16)}")
             }
-
-            is State.FaucetState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
-            }
-
-            is State.DoorState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}\n${stringResource(R.string.door_lock)}: ${state.lock}"
-            }
-
-            is State.SpeakerState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
-            }
-
-            is State.BlindsState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
-            }
-
-            is State.DefaultState -> {
-                "${stringResource(R.string.default_status)}: ${state.status}"
-            }
+        }
+        is State.BlindsState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            .append(stringResource(R.string.blinds_level)).append(": ${state.currentLevel}%")
+        }
+        is State.DefaultState -> {
+            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}")
         }
     }
+
+    return baseString.toString()
 }
 
 

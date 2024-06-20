@@ -120,21 +120,21 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit, is
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
 
-            TitleDeviceCard(text = truncateText(name,dims.maxCharLen))
+            TitleDeviceCard(text = truncateText(name,dims.maxCharLen), isTablet)
             Icon(painter = painterResource( getDrawableForDeviceType(type)),
                 contentDescription = "device",
                 Modifier.size(dims.iconSize.dp),
                 tint = MaterialTheme.colorScheme.primary )
-            TextDeviceCard(text = getDevStatusToStr(state))
+            TextDeviceCard(text = getDevStatusToStr(state), isTablet)
         }
     }
 }
 
 @Composable
-fun TitleDeviceCard(text: String) {
+fun TitleDeviceCard(text: String, isTablet: Boolean) {
     androidx.compose.material3.Text(
         modifier = Modifier.padding(horizontal = 5.dp),
-        fontSize = 24.sp,
+        fontSize = if(!isTablet){24}else{32}.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
         fontFamily = kodchasan,
@@ -143,10 +143,10 @@ fun TitleDeviceCard(text: String) {
 }
 
 @Composable
-fun TextDeviceCard(text: String) {
+fun TextDeviceCard(text: String, isTablet: Boolean) {
     androidx.compose.material3.Text(
         modifier = Modifier.padding(horizontal = 5.dp),
-        fontSize = 15.sp,
+        fontSize = if(!isTablet){15}else{20}.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
         fontFamily = kodchasan,

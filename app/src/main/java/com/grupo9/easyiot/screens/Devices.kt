@@ -2,6 +2,7 @@ package com.grupo9.easyiot.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -35,6 +36,44 @@ fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)
         }
         is DevicesState.Error -> {
             ErrorScreen(devicesState.message)
+        }
+    }
+}
+
+@Composable
+fun DevicesTabletScreen(
+    devicesState: DevicesState
+){
+    when ( devicesState ){
+        is DevicesState.Loading -> {
+            LoadingScreen()
+        }
+        is DevicesState.Success -> {
+            SuccessTabletScreen(devicesState.get.result)
+        }
+        is DevicesState.Error -> {
+            ErrorScreen(devicesState.message)
+        }
+    }
+}
+
+@Composable
+fun SuccessTabletScreen(devices : ArrayList<DeviceResult>){
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Title(text = "Devices")
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center, // Center vertically
+            horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        ) {
+            if (devices.isEmpty()){
+                Text(text = "Devices will appear here as you add them via the website.")
+            }
+            else{
+                CardGridDev(devices, null)
+            }
         }
     }
 }

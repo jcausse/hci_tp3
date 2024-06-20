@@ -46,71 +46,150 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    if (isLandscape) {
-        currentDirection = NavIcons.ROUTINES
-        Row {
-            NavigationRail(
-                modifier = modifier.fillMaxHeight(),
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                NavIcons.entries.forEach {
-                    NavigationRailItem(
-                        selected = currentDirection == it,
-                        onClick = { currentDirection = it },
-                        modifier = Modifier.padding(vertical = 16.dp),
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = it.icon),
-                                contentDescription = stringResource(id = it.contentDescriptor),
-                                tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                            )
-                        },
-                        label = { Text(stringResource(id = it.label),
-                            color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+    val isTablet = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        configuration.screenWidthDp > 840
+    } else {
+        configuration.screenWidthDp > 600
+    }
+
+    if(!isTablet) {
+        if (isLandscape) {
+            currentDirection = NavIcons.ROUTINES
+            Row {
+                NavigationRail(
+                    modifier = modifier.fillMaxHeight(),
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    NavIcons.entries.forEach {
+                        NavigationRailItem(
+                            selected = currentDirection == it,
+                            onClick = { currentDirection = it },
+                            modifier = Modifier.padding(vertical = 16.dp),
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = it.icon),
+                                    contentDescription = stringResource(id = it.contentDescriptor),
+                                    tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                )
+                            },
+                            label = {
+                                Text(
+                                    stringResource(id = it.label),
+                                    color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
                         )
-                        }
+                    }
+                }
+                when (currentDirection) {
+                    NavIcons.DEVICES -> DevicesScreen(
+                        devicesViewModel.devicesState,
+                        devicesViewModel::addRecent
+                    )
+
+                    NavIcons.DASHBOARD -> DashboardScreen(
+                        devicesViewModel.recentDevices,
+                        devicesViewModel.devicesState
+                    )
+
+                    NavIcons.ROUTINES -> RoutinesLandscapeScreen(
+                        routinesViewModel.routinesState,
+                        modifier
                     )
                 }
             }
-            when (currentDirection) {
-                NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
-                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices, devicesViewModel.devicesState)
-                NavIcons.ROUTINES -> RoutinesLandscapeScreen(routinesViewModel.routinesState, modifier)
+
+        } else {
+            NavigationSuiteScaffold(
+                navigationSuiteColors = NavigationSuiteDefaults.colors(
+                    navigationBarContainerColor = MaterialTheme.colorScheme.primary
+                ),
+                navigationSuiteItems = {
+                    NavIcons.entries.forEach {
+                        item(
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = it.icon),
+                                    contentDescription = stringResource(id = it.contentDescriptor),
+                                    tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+
+                                )
+                            },
+                            label = {
+                                Text(
+                                    stringResource(id = it.label),
+                                    color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                )
+                            },
+                            selected = currentDirection == it,
+                            onClick = { currentDirection = it }
+                        )
+                    }
+                },
+                modifier = modifier
+            ) {
+                when (currentDirection) {
+                    NavIcons.DEVICES -> DevicesScreen(
+                        devicesViewModel.devicesState,
+                        devicesViewModel::addRecent
+                    )
+
+                    NavIcons.DASHBOARD -> DashboardScreen(
+                        devicesViewModel.recentDevices,
+                        devicesViewModel.devicesState
+                    )
+
+                    NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
+                }
             }
         }
-
     } else {
-        NavigationSuiteScaffold(
-            navigationSuiteColors = NavigationSuiteDefaults.colors(
-                navigationBarContainerColor = MaterialTheme.colorScheme.primary
-            ),
-            navigationSuiteItems = {
-                NavIcons.entries.forEach {
-                    item(
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = it.icon),
-                                contentDescription = stringResource(id = it.contentDescriptor),
-                                tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+        if (isLandscape) {
+            currentDirection = NavIcons.DEVICES
+            Row {
+                NavigationRail(
+                    modifier = modifier.fillMaxHeight(),
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    NavIcons.entries.forEach {
+                        NavigationRailItem(
+                            selected = currentDirection == it,
+                            onClick = { currentDirection = it },
+                            modifier = Modifier.padding(vertical = 16.dp),
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = it.icon),
+                                    contentDescription = stringResource(id = it.contentDescriptor),
+                                    tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                )
+                            },
+                            label = {
+                                Text(
+                                    stringResource(id = it.label),
+                                    color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                )
+                            }
+                        )
+                    }
+                }
+                when (currentDirection) {
+                    NavIcons.DEVICES -> DevicesScreen(
+                        devicesViewModel.devicesState,
+                        devicesViewModel::addRecent
+                    )
 
-                            )
-                        },
-                        label = { Text(
-                            stringResource(id = it.label),
-                            color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                        )},
-                        selected = currentDirection == it,
-                        onClick = { currentDirection = it }
+                    NavIcons.DASHBOARD -> DashboardScreen(
+                        devicesViewModel.recentDevices,
+                        devicesViewModel.devicesState
+                    )
+
+                    NavIcons.ROUTINES -> RoutinesLandscapeScreen(
+                        routinesViewModel.routinesState,
+                        modifier
                     )
                 }
-        },
-            modifier = modifier
-        ){
-            when (currentDirection) {
-                NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
-                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices, devicesViewModel.devicesState)
-                NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
             }
+
         }
     }
 }

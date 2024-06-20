@@ -70,7 +70,12 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>){
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
-            CardGridDev(devices)
+            if (devices.isEmpty()){
+                Text(text = "Devices will appear here as you add them via the website.")
+            }
+            else{
+                CardGridDev(devices)
+            }
         }
     }
 }
@@ -93,7 +98,7 @@ fun CardGridDev(devices: List<DeviceResult>) {
                 // Handle the click event here
                     // funcion que lleva al expanded device view
                     // y carga el state
-                println("Clicked on ${index}")
+                println("Clicked on $index")
             })
         }
     }

@@ -92,7 +92,7 @@ fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? 
             key = { _, item -> item.id }
         )
         { _, device ->
-            DeviceCard(name = device.name, type = device.type.name,
+            DeviceCard(name = device.name, state = device.state, type = device.type.name,
                 onClick = {
                     // Handle the click event here
                     // funcion que lleva al expanded device view

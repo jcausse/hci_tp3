@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.grupo9.easyiot.model.device.State
 
 val kodchasan = FontFamily(
     Font(R.font.kodchasan_regular, FontWeight.Normal),
@@ -43,7 +44,7 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 @Composable
-fun DeviceCard(name: String, type: String, onClick: () -> Unit ) {
+fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .padding(10.dp)
@@ -66,11 +67,11 @@ fun DeviceCard(name: String, type: String, onClick: () -> Unit ) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
             }
+            TitleDeviceCard(text = name)
             Icon(painter = painterResource( getDrawableForDeviceType(type)),
                 contentDescription = "device",
                 Modifier.size(58.dp),
                 tint = MaterialTheme.colorScheme.primary )
-            TitleDeviceCard(text = name)
         }
     }
 }
@@ -79,6 +80,18 @@ fun DeviceCard(name: String, type: String, onClick: () -> Unit ) {
 fun TitleDeviceCard(text: String) {
     androidx.compose.material3.Text(
         modifier = Modifier.padding(5.dp),
+        fontSize = 24.sp,
+        color = MaterialTheme.colorScheme.primary,
+        text = text,
+        fontFamily = kodchasan,
+        fontWeight = FontWeight.Normal
+    )
+}
+
+@Composable
+fun TextDeviceCard(text: String) {
+    androidx.compose.material3.Text(
+        modifier = Modifier.padding(horizontal = 5.dp),
         fontSize = 24.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,

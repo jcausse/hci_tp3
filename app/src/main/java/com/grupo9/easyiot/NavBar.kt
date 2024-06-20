@@ -1,8 +1,7 @@
 package com.grupo9.easyiot
 
-
-
 import android.content.res.Configuration
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.grupo9.easyiot.screens.DashboardScreen
 import com.grupo9.easyiot.screens.DevicesScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
 import com.grupo9.easyiot.screens.RoutinesScreen
@@ -37,7 +37,11 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     if (isLandscape) {
-        LandscapeContent(currentDirection, routinesViewModel, devicesViewModel)
+        when (currentDirection) {
+            NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
+            NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
+            NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
+        }
     } else {
         NavigationSuiteScaffold(
             navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -62,20 +66,16 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                         onClick = { currentDirection = it }
                     )
                 }
-
-            },
+        },
             modifier = modifier
         ){
-            PortraitContent(currentDirection, routinesViewModel, devicesViewModel)
+            when (currentDirection) {
+                NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
+                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
+                NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
+            }
         }
     }
-
-
-}
-
-@Composable
-fun DashboardScreen() {
-    Text(text = "DashBoard")
 }
 
 @Preview(showBackground = true)
@@ -87,34 +87,10 @@ fun BottomNavigationPreview() {
 
 enum class NavIcons (
     @StringRes val label: Int,
-    val icon: Int,
+    @DrawableRes val icon: Int,
     @StringRes val contentDescriptor: Int
 ){
     DEVICES(R.string.bottom_navigation_devices, R.drawable.devices, R.string.bottom_navigation_devices),
     DASHBOARD(R.string.bottom_navigation_dashboard, R.drawable.dash, R.string.bottom_navigation_dashboard),
     ROUTINES(R.string.bottom_navigation_routines, R.drawable.routine, R.string.bottom_navigation_routines)
-}
-
-/*
-@Composable
-fun NavigationScaffold() {
-
-}
-*/
-@Composable
-fun PortraitContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
-    when (currentDirection) {
-        NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen()
-        NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
-    }
-}
-
-@Composable
-fun LandscapeContent(currentDirection: NavIcons, routinesViewModel: RoutinesViewModel, devicesViewModel: DevicesViewModel) {
-    when (currentDirection) {
-        NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen()
-        NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
-    }
 }

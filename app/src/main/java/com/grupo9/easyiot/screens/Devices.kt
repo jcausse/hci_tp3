@@ -25,13 +25,13 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)){
+fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit), isTablet: Boolean){
     when ( devicesState ){
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result, onDeviceClick)
+            SuccessScreen(devicesState.get.result, onDeviceClick, isTablet)
         }
         is DevicesState.Error -> {
             ErrorScreen(devicesState.message)
@@ -41,14 +41,14 @@ fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)
 
 @Composable
 fun DevicesTabletScreen(
-    devicesState: DevicesState
+    devicesState: DevicesState, isTablet: Boolean
 ){
     when ( devicesState ){
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessTabletScreen(devicesState.get.result)
+            SuccessTabletScreen(devicesState.get.result, isTablet)
         }
         is DevicesState.Error -> {
             ErrorScreen(devicesState.message)
@@ -57,7 +57,7 @@ fun DevicesTabletScreen(
 }
 
 @Composable
-fun SuccessTabletScreen(devices : ArrayList<DeviceResult>){
+fun SuccessTabletScreen(devices : ArrayList<DeviceResult>, isTablet : Boolean){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -71,7 +71,7 @@ fun SuccessTabletScreen(devices : ArrayList<DeviceResult>){
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices, null,4)
+                CardGridDev(devices, null,isTablet)
             }
         }
     }
@@ -98,7 +98,7 @@ fun ErrorScreen(message: String){
     }
 }
 @Composable
-fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit){
+fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit, isTablet: Boolean){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -112,13 +112,19 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> 
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices, onDeviceClick,2)
+                CardGridDev(devices, onDeviceClick,isTablet)
             }
         }
     }
 }
 @Composable
-fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null, colAmount : Int) {
+fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null, isTablet: Boolean) {
+    val colAmount = if(isTablet){
+        4
+    } else {
+        2
+    }
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(colAmount), // Define the number of columns
         modifier = Modifier
@@ -137,7 +143,7 @@ fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? 
                     // y carga el state
                     println("Clicked on ${device.id} AKA ${device.name}")
                     onDeviceClick?.invoke(device.id)
-                }
+                }, isTablet = isTablet
             )
         }
     }

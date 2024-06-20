@@ -109,7 +109,7 @@ fun SuccessRoutineLandscapeScreen(routines: List<RoutineResult>, modifier: Modif
             itemsIndexed(
                 routines,
                 key = { _, item -> item.id }
-            ) { index,routine ->
+            ) { _,routine ->
                 RoutineCard(
                     id = routine.id,
                     name = routine.name,
@@ -143,7 +143,7 @@ fun SuccessRoutineScreen(routines: List<RoutineResult>, modifier: Modifier, cont
             itemsIndexed(
                 routines,
                 key = { _, item -> item.id }
-            ) { index,routine ->
+            ) { _,routine ->
                 RoutineCard(
                     id = routine.id,
                     name = routine.name,

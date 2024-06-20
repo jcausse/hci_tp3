@@ -3,7 +3,6 @@ package com.grupo9.easyiot
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -20,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
@@ -85,7 +83,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 when (currentDirection) {
                     NavIcons.DEVICES -> DevicesScreen(
                         devicesViewModel.devicesState,
-                        devicesViewModel::addRecent
+                        devicesViewModel::addRecent,
+                        isTablet
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(
@@ -132,7 +131,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 when (currentDirection) {
                     NavIcons.DEVICES -> DevicesScreen(
                         devicesViewModel.devicesState,
-                        devicesViewModel::addRecent
+                        devicesViewModel::addRecent,
+                        isTablet
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(
@@ -175,7 +175,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 }
                 when (currentDirection) {
                     NavIcons.DEVICES -> DevicesTabletScreen(
-                        devicesViewModel.devicesState
+                        devicesViewModel.devicesState,
+                        isTablet
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(

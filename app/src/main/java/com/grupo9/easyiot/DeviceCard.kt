@@ -81,13 +81,32 @@ fun getDevStatusToStr(state: State): String {
 }
 
 
+data class Dimensions(
+    val padding: Int,
+    val width: Int,
+    val height: Int,
+    val iconSize: Int,
+    val maxCharLen : Int
+)
+
+fun dimensionType(isTablet: Boolean) : Dimensions{
+    return if(!isTablet){
+        Dimensions(10,165,180,58, 11)
+    } else {
+        Dimensions(10,165,240,80, 20)
+    }
+}
+
 @Composable
-fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
+fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit, isTablet: Boolean ) {
+
+    val dims = dimensionType(isTablet)
+
     androidx.compose.material3.Card(
         modifier = Modifier
-            .padding(10.dp)
-            .width(165.dp)
-            .height(180.dp)
+            .padding(dims.padding.dp)
+            .width(dims.width.dp)
+            .height(dims.height.dp)
             .clickable(onClick = onClick),
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
             contentColor = MaterialTheme.colorScheme.primary),
@@ -95,16 +114,16 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
     ) {
         Column (
             modifier = Modifier
-                .padding(10.dp)
+                .padding(dims.padding.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
 
-            TitleDeviceCard(text = truncateText(name,11))
+            TitleDeviceCard(text = truncateText(name,dims.maxCharLen))
             Icon(painter = painterResource( getDrawableForDeviceType(type)),
                 contentDescription = "device",
-                Modifier.size(58.dp),
+                Modifier.size(dims.iconSize.dp),
                 tint = MaterialTheme.colorScheme.primary )
             TextDeviceCard(text = getDevStatusToStr(state))
         }

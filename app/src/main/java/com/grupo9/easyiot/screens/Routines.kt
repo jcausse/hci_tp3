@@ -149,7 +149,7 @@ fun ScrollableList(actions: ArrayList<Actions>) {
 fun Title ( text: String ){
     Text(
         modifier = Modifier.padding(5.dp),
-        fontSize = 64.sp,
+        fontSize = 36.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
         fontFamily = kodchasan,

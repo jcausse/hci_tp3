@@ -25,13 +25,13 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen( devicesState: DevicesState){
-    when ( devicesState ){
+fun DevicesScreen(devicesState: DevicesState, onDeviceClick: (id: String) -> Unit) {
+    when (devicesState) {
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result)
+            SuccessScreen(devicesState.get.result, onDeviceClick = onDeviceClick)
         }
         is DevicesState.Error -> {
             ErrorScreen(devicesState.message)
@@ -40,7 +40,7 @@ fun DevicesScreen( devicesState: DevicesState){
 }
 
 @Composable
-fun LoadingScreen(){
+fun LoadingScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
@@ -50,7 +50,7 @@ fun LoadingScreen(){
     }
 }
 @Composable
-fun ErrorScreen(message: String){
+fun ErrorScreen(message: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
@@ -60,18 +60,21 @@ fun ErrorScreen(message: String){
     }
 }
 @Composable
-fun SuccessScreen(devices : ArrayList<DeviceResult>){
+fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
         Title(text = "Devices")
-        CardGridDev(devices)
+        CardGridDev(devices, onDeviceClick = onDeviceClick)
     }
 }
 @Composable
-fun CardGridDev(devices : ArrayList<DeviceResult>) {
+fun CardGridDev(
+    devices : ArrayList<DeviceResult>,
+    onDeviceClick: (id: String) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // Define the number of columns
         modifier = Modifier
@@ -85,7 +88,8 @@ fun CardGridDev(devices : ArrayList<DeviceResult>) {
                 // Handle the click event here
                     // funcion que lleva al expanded device view
                     // y carga el state
-                println("Clicked on ${index}")
+                    println("Clicked on ${index}")
+                    onDeviceClick(device.id)
             })
         }
     }

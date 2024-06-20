@@ -23,6 +23,8 @@ class DevicesViewModel : ViewModel() {
             devicesState = try {
                 val result = DeviceApi.retorfitService.getDeviceList()
                 DevicesState.Success(result)
+
+
             } catch (e: IOException) {
                 println("Network error: ${e.message}")
                 DevicesState.Error("Network error: ${e.message}")

@@ -48,6 +48,8 @@ android {
 }
 
 dependencies {
+    val nav_version = "2.7.7"
+
     implementation(libs.retrofit)
     implementation(libs.converter.kotlin.serialization)
     implementation(libs.androidx.lifecycle.viewmodel.compose.android)
@@ -65,6 +67,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.adaptive.android)
     implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation("androidx.navigation:navigation-compose:$nav_version")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

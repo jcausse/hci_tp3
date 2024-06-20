@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 fun EasyIoTApp(){
     Scaffold (
         topBar = { TopBarApp() }
-    ){
+    ) {
             innerPadding -> AppNavigationBar(Modifier.padding(innerPadding))
     }
 }

@@ -38,7 +38,8 @@ class RoutinesViewModel : ViewModel() {
     fun executeRoutine(routineId: String){
         viewModelScope.launch {
             executeResult = try {
-                RoutineApi.retorfitService.executeRoutine(routineId)
+                val result = RoutineApi.retorfitService.executeRoutine(routineId)
+                result.result.last()
             }catch (e: Exception){
                 false
             }

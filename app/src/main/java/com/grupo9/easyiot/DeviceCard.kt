@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -51,73 +52,78 @@ fun truncateText(text: String, maxLength: Int): String {
     }
 }
 
+@Composable
 fun getDevStatusToStr(state: State, isTablet: Boolean): String {
     if(isTablet) {
         return when (state) {
             is State.RefrigeratorState -> {
-                "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C\nMode: ${state.mode}"
+                "${stringResource(R.string.temperature)}: ${state.temperature} C\n" +
+                        "${stringResource(R.string.freezer_temperature)}: ${state.freezerTemperature} C\n" +
+                        "${stringResource(R.string.mode)}: ${state.mode}"
             }
-
             is State.LampState -> {
-                "Status: ${state.status}\nColor: ${state.color}\nBrightness: ${state.brightness}"
+                "${stringResource(R.string.default_status)}: ${state.status}\n" +
+                        "${stringResource(R.string.lamp_color)}: ${state.color}\n" +
+                        "${stringResource(R.string.lamp_brightness)}: ${state.brightness}"
             }
-
             is State.VacuumState -> {
-                "Status: ${state.status}\nMode: ${state.mode}\nBatteryLevel: ${state.batteryLevel}%\nLocation: ${truncateText(state.location.name,10)} "
+                "${stringResource(R.string.default_status)}: ${state.status}\n" +
+                        "${stringResource(R.string.mode)}: ${state.mode}\n" +
+                        "${stringResource(R.string.vacuum_battery_level)}: ${state.batteryLevel}%\n" +
+                        "${stringResource(R.string.vacuum_location)}: ${truncateText(state.location.name, 10)}"
             }
-
             is State.FaucetState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
-
             is State.DoorState -> {
-                "Status: ${state.status}\nLock: ${state.lock}"
+                "${stringResource(R.string.default_status)}: ${state.status}\n" +
+                        "${stringResource(R.string.door_lock)}: ${state.lock}"
             }
-
             is State.SpeakerState -> {
-                "Status: ${state.status}\nSong: ${truncateText(state.song.title,30)}\nBy: ${truncateText(state.song.artist,16)}"
+                "${stringResource(R.string.default_status)}: ${state.status}\n" +
+                        "${stringResource(R.string.speaker_song)}: ${truncateText(state.song.title, 30)}\n" +
+                        "${stringResource(R.string.speaker_artist)}: ${truncateText(state.song.artist, 16)}"
             }
-
             is State.BlindsState -> {
-                "Status: ${state.status}\nLevel: ${state.currentLevel}%"
+                "${stringResource(R.string.default_status)}: ${state.status}\n" +
+                        "${stringResource(R.string.blinds_level)}: ${state.currentLevel}%"
             }
-
             is State.DefaultState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
         }
     } else {
         return when (state) {
             is State.RefrigeratorState -> {
-                "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C"
+                "${stringResource(R.string.temperature)}: ${state.temperature} C\n${stringResource(R.string.freezer_temperature)}: ${state.freezerTemperature} C"
             }
 
             is State.LampState -> {
-                "Status: ${state.status}\nColor: ${state.color}"
+                "${stringResource(R.string.default_status)}: ${state.status}\n${stringResource(R.string.lamp_color)}: ${state.color}"
             }
 
             is State.VacuumState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
 
             is State.FaucetState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
 
             is State.DoorState -> {
-                "Status: ${state.status}\nLock: ${state.lock}"
+                "${stringResource(R.string.default_status)}: ${state.status}\n${stringResource(R.string.door_lock)}: ${state.lock}"
             }
 
             is State.SpeakerState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
 
             is State.BlindsState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
 
             is State.DefaultState -> {
-                "Status: ${state.status}"
+                "${stringResource(R.string.default_status)}: ${state.status}"
             }
         }
     }

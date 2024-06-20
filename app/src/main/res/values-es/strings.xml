@@ -6,4 +6,24 @@
     <string name="bottom_navigation_devices">Dispositivos</string>
     <string name="bottom_navigation_routines">Rutinas</string>
     <string name="bottom_navigation_dashboard">Panel Central</string>
+
+    <string name="temperature">Temp</string>
+    <string name="freezer_temperature">TempCong</string>
+    <string name="mode">Modo</string>
+
+    <string name="lamp_color">Color</string>
+    <string name="lamp_brightness">Brillo</string>
+
+    <string name="vacuum_mode">Modo</string>
+    <string name="vacuum_battery_level">Bateria</string>
+    <string name="vacuum_location">Ubicación</string>
+
+    <string name="door_lock">Cerradura</string>
+
+    <string name="speaker_song">Canción</string>
+    <string name="speaker_artist">Por</string>
+
+    <string name="blinds_level">Apertura</string>
+
+    <string name="default_status">Estado</string>
 </resources>

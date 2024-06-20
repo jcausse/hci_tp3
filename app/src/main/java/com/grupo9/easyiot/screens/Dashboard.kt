@@ -11,20 +11,26 @@ import androidx.compose.ui.Modifier
 import com.grupo9.easyiot.model.device.DeviceResult
 
 @Composable
-fun DashboardScreen(recentDevices: SnapshotStateList<DeviceResult>) {
-    Title(text = "Recents")
+fun DashboardScreen(recentDevices: SnapshotStateList<String>) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center, // Center vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-
-        if (recentDevices.size == 0) {
-            Text(
-                text = "Devices will appear here as you interact with them.",
-            )
-        } else {
-            CardGridDev(recentDevices.toList())
+        Title(text = "Recent Devices")
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center, // Center vertically
+            horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        ) {
+            if (recentDevices.size == 0) {
+                Text(
+                    text = "Devices will appear here as you interact with them.",
+                )
+            } else {
+                //CardGridDev(recentDevices.toList())
+                for (id in recentDevices) {
+                 Text(text = id)
+                }
+            }
         }
     }
 }

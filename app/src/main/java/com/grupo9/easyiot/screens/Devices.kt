@@ -25,13 +25,13 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen( devicesState: DevicesState){
+fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)){
     when ( devicesState ){
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result)
+            SuccessScreen(devicesState.get.result, onDeviceClick)
         }
         is DevicesState.Error -> {
             ErrorScreen(devicesState.message)
@@ -60,7 +60,7 @@ fun ErrorScreen(message: String){
     }
 }
 @Composable
-fun SuccessScreen(devices : ArrayList<DeviceResult>){
+fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit){
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -74,32 +74,33 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>){
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices)
+                CardGridDev(devices, onDeviceClick)
             }
         }
     }
 }
 @Composable
-fun CardGridDev(devices: List<DeviceResult>) {
+fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // Define the number of columns
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
     ) {
-
         itemsIndexed(
             devices,
             key = { _, item -> item.id }
         )
-        { index, device ->
+        { _, device ->
             DeviceCard(name = device.name, type = device.type.name,
                 onClick = {
-                // Handle the click event here
+                    // Handle the click event here
                     // funcion que lleva al expanded device view
                     // y carga el state
-                println("Clicked on $index")
-            })
+                    println("Clicked on ${device.id} AKA ${device.name}")
+                    onDeviceClick?.invoke(device.id)
+                }
+            )
         }
     }
 }

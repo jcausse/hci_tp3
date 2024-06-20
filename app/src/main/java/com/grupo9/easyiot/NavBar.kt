@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.grupo9.easyiot.screens.DashboardScreen
 import com.grupo9.easyiot.screens.DevicesScreen
-import com.grupo9.easyiot.screens.DevicesTabletScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
 import com.grupo9.easyiot.screens.RoutinesLandscapeScreen
 import com.grupo9.easyiot.screens.RoutinesScreen

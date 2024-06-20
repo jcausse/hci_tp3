@@ -51,31 +51,74 @@ fun truncateText(text: String, maxLength: Int): String {
     }
 }
 
-fun getDevStatusToStr(state: State): String {
-    return when (state) {
-        is State.RefrigeratorState -> {
-            "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C"
+fun getDevStatusToStr(state: State, isTablet: Boolean): String {
+    if(isTablet) {
+        return when (state) {
+            is State.RefrigeratorState -> {
+                "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C\nMode: ${state.mode}"
+            }
+
+            is State.LampState -> {
+                "Status: ${state.status}\nColor: ${state.color}\nBrightness: ${state.brightness}"
+            }
+
+            is State.VacuumState -> {
+                "Status: ${state.status}\nMode: ${state.mode}\nBatteryLevel: ${state.batteryLevel}%\nLocation: ${truncateText(state.location.name,10)} "
+            }
+
+            is State.FaucetState -> {
+                "Status: ${state.status}"
+            }
+
+            is State.DoorState -> {
+                "Status: ${state.status}\nLock: ${state.lock}"
+            }
+
+            is State.SpeakerState -> {
+                "Status: ${state.status}\nSong: ${truncateText(state.song.title,30)}\nBy: ${truncateText(state.song.artist,16)}"
+            }
+
+            is State.BlindsState -> {
+                "Status: ${state.status}\nLevel: ${state.currentLevel}%"
+            }
+
+            is State.DefaultState -> {
+                "Status: ${state.status}"
+            }
         }
-        is State.LampState -> {
-            "Status: ${state.status}\nColor: ${state.color}"
-        }
-        is State.VacuumState -> {
-            "Status: ${state.status}"
-        }
-        is State.FaucetState -> {
-            "Status: ${state.status}"
-        }
-        is State.DoorState -> {
-            "Status: ${state.status}\nLock: ${state.lock}"
-        }
-        is State.SpeakerState -> {
-            "Status: ${state.status}"
-        }
-        is State.BlindsState -> {
-            "Status: ${state.status}"
-        }
-        is State.DefaultState -> {
-            "Status: ${state.status}"
+    } else {
+        return when (state) {
+            is State.RefrigeratorState -> {
+                "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C"
+            }
+
+            is State.LampState -> {
+                "Status: ${state.status}\nColor: ${state.color}"
+            }
+
+            is State.VacuumState -> {
+                "Status: ${state.status}"
+            }
+
+            is State.FaucetState -> {
+                "Status: ${state.status}"
+            }
+
+            is State.DoorState -> {
+                "Status: ${state.status}\nLock: ${state.lock}"
+            }
+
+            is State.SpeakerState -> {
+                "Status: ${state.status}"
+            }
+
+            is State.BlindsState -> {
+                "Status: ${state.status}"
+            }
+
+            is State.DefaultState -> {
+                "Status: ${state.status}"
+            }
         }
     }
 }
@@ -125,7 +168,7 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit, is
                 contentDescription = "device",
                 Modifier.size(dims.iconSize.dp),
                 tint = MaterialTheme.colorScheme.primary )
-            TextDeviceCard(text = getDevStatusToStr(state), isTablet)
+            TextDeviceCard(text = getDevStatusToStr(state, isTablet), isTablet)
         }
     }
 }

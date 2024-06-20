@@ -107,7 +107,7 @@ fun PortraitContent(
 ) {
     when (currentDirection) {
         NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.dashboardState)
+        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.recentDevices)
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }
 }
@@ -121,7 +121,7 @@ fun LandscapeContent(
 ) {
     when (currentDirection) {
         NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState)
-        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.dashboardState)
+        NavIcons.DASHBOARD -> DashboardScreen(dashboardViewModel.recentDevices)
         NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
     }
 }

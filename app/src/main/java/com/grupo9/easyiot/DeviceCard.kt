@@ -33,7 +33,8 @@ private val deviceTypeToDrawable = mapOf(
     "blinds" to R.drawable.blinds,
     "speaker" to R.drawable.speaker,
     "vacuum" to R.drawable.vacuum,
-    "lamp" to R.drawable.lamp
+    "lamp" to R.drawable.lamp,
+    "default" to R.drawable.file_question
     // Add more mappings as needed
 )
 

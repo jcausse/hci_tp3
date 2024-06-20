@@ -7,29 +7,29 @@ import kotlinx.serialization.Serializable
 sealed class State {
   @Serializable
   data class LampState(
-    @SerialName("status") val status: String,
-    @SerialName("color") val color: String,
-    @SerialName("brightness") val brightness: Int
+    @SerialName("status") val status: String = "Unknown",
+    @SerialName("color") val color: String = "Unknown",
+    @SerialName("brightness") val brightness: Int = 0
   ) : State()
 
   @Serializable
   data class DoorState(
-    @SerialName("status") val status: String,
-    @SerialName("lock") val lock: String
+    @SerialName("status") val status: String = "Unknown",
+    @SerialName("lock") val lock: String = "Unknown"
   ) : State()
 
   @Serializable
   data class BlindsState(
-    @SerialName("status") val status: String,
-    @SerialName("level") val level: Int,
-    @SerialName("currentLevel") val currentLevel: Int
+    @SerialName("status") val status: String = "Unknown",
+    @SerialName("level") val level: Int = 0,
+    @SerialName("currentLevel") val currentLevel: Int = 0
   ) : State()
 
   @Serializable
   data class SpeakerState(
-    @SerialName("status") val status: String,
-    @SerialName("volume") val volume: Int,
-    @SerialName("genre") val genre: String,
+    @SerialName("status") val status: String = "Unknown",
+    @SerialName("volume") val volume: Int = 0,
+    @SerialName("genre") val genre: String = "Unknown",
     @SerialName("song") val song: Song = Song()
   ) : State() {
     @Serializable
@@ -44,27 +44,32 @@ sealed class State {
 
   @Serializable
   data class RefrigeratorState(
-    @SerialName("freezerTemperature") val freezerTemperature: Int,
-    @SerialName("temperature") val temperature: Int,
-    @SerialName("mode") val mode: String
+    @SerialName("freezerTemperature") val freezerTemperature: Int = 100,
+    @SerialName("temperature") val temperature: Int = 100,
+    @SerialName("mode") val mode: String = "Unknown"
   ) : State()
 
   @Serializable
   data class FaucetState(
-    @SerialName("status") val status: String
+    @SerialName("status") val status: String = "Unknown"
   ) : State()
 
   @Serializable
   data class VacuumState(
-    @SerialName("status") val status: String,
-    @SerialName("mode") val mode: String,
-    @SerialName("batteryLevel") val batteryLevel: Int,
-    @SerialName("location") val location: Location
+    @SerialName("status") val status: String = "Unknown",
+    @SerialName("mode") val mode: String = "Unknown",
+    @SerialName("batteryLevel") val batteryLevel: Int = 0,
+    @SerialName("location") val location: Location = Location()
   ) : State() {
     @Serializable
     data class Location(
-      @SerialName("id") val id: String,
-      @SerialName("name") val name: String
+      @SerialName("id") val id: String = "Unknown",
+      @SerialName("name") val name: String = "Unknown"
     )
   }
+
+  @Serializable
+  data class DefaultState(
+    @SerialName("UnknownState") val status: String = "Unknown",
+  ) : State()
 }

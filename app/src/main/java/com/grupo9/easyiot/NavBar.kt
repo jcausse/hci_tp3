@@ -3,6 +3,8 @@ package com.grupo9.easyiot
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -55,27 +57,32 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
             Row {
                 NavigationRail(
                     modifier = modifier.fillMaxHeight(),
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ) {
-                    NavIcons.entries.forEach {
-                        NavigationRailItem(
-                            selected = currentDirection == it,
-                            onClick = { currentDirection = it },
-                            modifier = Modifier.padding(vertical = 16.dp),
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = it.icon),
-                                    contentDescription = stringResource(id = it.contentDescriptor),
-                                    tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                                )
-                            },
-                            label = {
-                                Text(
-                                    stringResource(id = it.label),
-                                    color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                                )
-                            }
-                        )
+                    Column(
+                        verticalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier.fillMaxHeight()
+                    ) {
+                        NavIcons.entries.forEach {
+                            NavigationRailItem(
+                                selected = currentDirection == it,
+                                onClick = { currentDirection = it },
+                                modifier = Modifier.padding(vertical = if(isTablet){70}else{10}.dp),
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(id = it.icon),
+                                        contentDescription = stringResource(id = it.contentDescriptor),
+                                        tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        stringResource(id = it.label),
+                                        color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
                 when (currentDirection) {

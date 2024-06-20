@@ -3,26 +3,36 @@ package com.grupo9.easyiot
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Companion.Start
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.grupo9.easyiot.screens.DashboardScreen
 import com.grupo9.easyiot.screens.DevicesScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
+import com.grupo9.easyiot.screens.RoutinesLandscapeScreen
 import com.grupo9.easyiot.screens.RoutinesScreen
 import com.grupo9.easyiot.screens.RoutinesViewModel
 
@@ -37,11 +47,38 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     if (isLandscape) {
-        when (currentDirection) {
-            NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
-            NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
-            NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
+        currentDirection = NavIcons.ROUTINES
+        Row {
+            NavigationRail(
+                modifier = modifier.fillMaxHeight(),
+                containerColor = MaterialTheme.colorScheme.primary
+            ) {
+                NavIcons.entries.forEach {
+                    NavigationRailItem(
+                        selected = currentDirection == it,
+                        onClick = { currentDirection = it },
+                        modifier = Modifier.padding(vertical = 16.dp),
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = it.icon),
+                                contentDescription = stringResource(id = it.contentDescriptor),
+                                tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                            )
+                        },
+                        label = { Text(stringResource(id = it.label),
+                            color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                        )
+                        }
+                    )
+                }
+            }
+            when (currentDirection) {
+                NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
+                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
+                NavIcons.ROUTINES -> RoutinesLandscapeScreen(routinesViewModel.routinesState, modifier)
+            }
         }
+
     } else {
         NavigationSuiteScaffold(
             navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -71,9 +108,36 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
         ){
             when (currentDirection) {
                 NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
-                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
+                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices, devicesViewModel.devicesState)
                 NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
             }
+        }
+    }
+}
+
+@Composable
+fun LeftNavBar(modifier: Modifier) {
+    var selectedItem by remember { mutableStateOf(NavIcons.DASHBOARD) }
+
+    NavigationRail(
+        modifier = modifier.fillMaxHeight(),
+        containerColor = MaterialTheme.colorScheme.primary
+    ) {
+        NavIcons.entries.forEach {
+            NavigationRailItem(
+                selected = selectedItem == it,
+                onClick = { selectedItem = it },
+                icon = {
+                    Icon(
+                        painter = painterResource(id = it.icon),
+                        contentDescription = stringResource(id = it.contentDescriptor)
+                    )
+                },
+                label = { Text(stringResource(id = it.label),
+                    color = if (selectedItem == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
+                )
+                }
+            )
         }
     }
 }

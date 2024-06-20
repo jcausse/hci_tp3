@@ -9,9 +9,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.grupo9.easyiot.model.device.DeviceResult
+import com.grupo9.easyiot.screens.DevicesState as DevicesState
 
 @Composable
-fun DashboardScreen(recentDevices: SnapshotStateList<String>) {
+fun DashboardScreen(recentDevices: SnapshotStateList<String>, devicesState: DevicesState) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -21,15 +22,19 @@ fun DashboardScreen(recentDevices: SnapshotStateList<String>) {
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
-            if (recentDevices.size == 0) {
-                Text(
-                    text = "Devices will appear here as you interact with them.",
-                )
+            if (devicesState !is DevicesState.Success){
+                Text(text = "Error loading devices")
+            }
+            else if (recentDevices.size == 0) {
+                Text(text = "Devices will appear here as you interact with them.")
             } else {
-                //CardGridDev(recentDevices.toList())
-                for (id in recentDevices) {
-                 Text(text = id)
+                val recentDevicesDetails: ArrayList<DeviceResult> = ArrayList()
+                for (device in devicesState.get.result){
+                    if (recentDevices.contains(device.id)){
+                        recentDevicesDetails.add(device)
+                    }
                 }
+                CardGridDev(recentDevicesDetails)
             }
         }
     }

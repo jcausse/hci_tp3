@@ -108,7 +108,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
         ){
             when (currentDirection) {
                 NavIcons.DEVICES -> DevicesScreen(devicesViewModel.devicesState, devicesViewModel::addRecent)
-                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices)
+                NavIcons.DASHBOARD -> DashboardScreen(devicesViewModel.recentDevices, devicesViewModel.devicesState)
                 NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)
             }
         }

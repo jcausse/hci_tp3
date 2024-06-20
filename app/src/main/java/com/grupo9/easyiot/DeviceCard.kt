@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.model.device.State
@@ -42,6 +43,14 @@ private val deviceTypeToDrawable = mapOf(
 // Method to get drawable resource ID based on device type
 fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
+}
+
+fun truncateText(text: String, maxLength: Int): String {
+    return if (text.length > maxLength) {
+        text.substring(0, maxLength-3) + "..."
+    } else {
+        text
+    }
 }
 
 fun getDevStatusToStr(state: State): String {
@@ -94,30 +103,12 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
 
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TitleDeviceCard(text = name)
-            }
-
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Icon(painter = painterResource( getDrawableForDeviceType(type)),
-                    contentDescription = "device",
-                    Modifier.size(58.dp),
-                    tint = MaterialTheme.colorScheme.primary )
-            }
-
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TextDeviceCard(text = getDevStatusToStr(state))
-            }
-
+            TitleDeviceCard(text = truncateText(name,11))
+            Icon(painter = painterResource( getDrawableForDeviceType(type)),
+                contentDescription = "device",
+                Modifier.size(58.dp),
+                tint = MaterialTheme.colorScheme.primary )
+            TextDeviceCard(text = getDevStatusToStr(state))
         }
     }
 }

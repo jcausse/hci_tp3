@@ -62,16 +62,20 @@ fun ErrorScreen(message: String){
 @Composable
 fun SuccessScreen(devices : ArrayList<DeviceResult>){
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center, // Center vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-    ) {
+        modifier = Modifier.fillMaxSize()
+    ){
         Title(text = "Devices")
-        CardGridDev(devices)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center, // Center vertically
+            horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        ) {
+            CardGridDev(devices)
+        }
     }
 }
 @Composable
-fun CardGridDev(devices : ArrayList<DeviceResult>) {
+fun CardGridDev(devices: List<DeviceResult>) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // Define the number of columns
         modifier = Modifier
@@ -79,7 +83,11 @@ fun CardGridDev(devices : ArrayList<DeviceResult>) {
             .padding(10.dp)
     ) {
 
-        itemsIndexed(devices) { index, device ->
+        itemsIndexed(
+            devices,
+            key = { _, item -> item.id }
+        )
+        { index, device ->
             DeviceCard(name = device.name, type = device.type.name,
                 onClick = {
                 // Handle the click event here

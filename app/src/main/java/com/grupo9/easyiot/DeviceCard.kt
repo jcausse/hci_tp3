@@ -43,6 +43,46 @@ private val deviceTypeToDrawable = mapOf(
 fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
+
+fun getDevStatusToStr(state: State): String{
+    var retStr = ""
+    when (state) {
+        is State.RefrigeratorState -> {
+            retStr = state.temperature.toString() + "\n" + state.freezerTemperature.toString()
+        }
+
+        is State.LampState -> {
+            retStr = state.status + "\n"  + state.color
+        }
+
+        is State.VacuumState -> {
+            retStr = state.mode
+        }
+
+        is State.FaucetState -> {
+            retStr = state.status
+        }
+
+        is State.DoorState -> {
+            retStr = state.status + "\n" + state.lock
+        }
+
+        is State.SpeakerState -> {
+            retStr = state.status + "\n" + state.song.title
+        }
+
+        is State.BlindsState -> {
+            retStr = state.status
+        }
+
+        is State.DefaultState -> {
+            retStr = state.status
+        }
+    }
+
+    return retStr
+}
+
 @Composable
 fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
     androidx.compose.material3.Card(
@@ -72,6 +112,7 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
                 contentDescription = "device",
                 Modifier.size(58.dp),
                 tint = MaterialTheme.colorScheme.primary )
+            TextDeviceCard(text = getDevStatusToStr(state))
         }
     }
 }

@@ -2,7 +2,6 @@ package com.grupo9.easyiot.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -72,7 +71,7 @@ fun SuccessTabletScreen(devices : ArrayList<DeviceResult>){
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices, null)
+                CardGridDev(devices, null,4)
             }
         }
     }
@@ -113,15 +112,15 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> 
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices, onDeviceClick)
+                CardGridDev(devices, onDeviceClick,2)
             }
         }
     }
 }
 @Composable
-fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null) {
+fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null, colAmount : Int) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Define the number of columns
+        columns = GridCells.Fixed(colAmount), // Define the number of columns
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)

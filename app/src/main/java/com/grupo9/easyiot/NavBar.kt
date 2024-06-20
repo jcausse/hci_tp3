@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.grupo9.easyiot.screens.DashboardScreen
 import com.grupo9.easyiot.screens.DevicesScreen
+import com.grupo9.easyiot.screens.DevicesTabletScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
 import com.grupo9.easyiot.screens.RoutinesLandscapeScreen
 import com.grupo9.easyiot.screens.RoutinesScreen
@@ -46,7 +47,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val isTablet = if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+    val isTablet = if (isLandscape) {
         configuration.screenWidthDp > 840
     } else {
         configuration.screenWidthDp > 600
@@ -173,9 +174,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                     }
                 }
                 when (currentDirection) {
-                    NavIcons.DEVICES -> DevicesScreen(
-                        devicesViewModel.devicesState,
-                        devicesViewModel::addRecent
+                    NavIcons.DEVICES -> DevicesTabletScreen(
+                        devicesViewModel.devicesState
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(

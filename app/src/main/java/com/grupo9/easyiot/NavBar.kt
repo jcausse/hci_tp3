@@ -47,7 +47,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val isTablet = if (isLandscape) {
-        configuration.screenWidthDp > 840
+        configuration.screenWidthDp > 900
     } else {
         configuration.screenWidthDp > 600
     }

@@ -34,7 +34,7 @@ fun DashboardScreen(recentDevices: SnapshotStateList<String>, devicesState: Devi
                         recentDevicesDetails.add(device)
                     }
                 }
-                CardGridDev(recentDevicesDetails)
+                CardGridDev(recentDevicesDetails.reversed())
             }
         }
     }

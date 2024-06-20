@@ -44,52 +44,43 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 
-fun getDevStatusToStr(state: State): String{
-    var retStr = ""
-    when (state) {
+fun getDevStatusToStr(state: State): String {
+    return when (state) {
         is State.RefrigeratorState -> {
-            retStr = state.temperature.toString() + "\n" + state.freezerTemperature.toString()
+            "Temp: ${state.temperature} C\nFreezeTemp: ${state.freezerTemperature} C"
         }
-
         is State.LampState -> {
-            retStr = state.status + "\n"  + state.color
+            "Status: ${state.status}\nColor: ${state.color}"
         }
-
         is State.VacuumState -> {
-            retStr = state.mode
+            "Status: ${state.status}"
         }
-
         is State.FaucetState -> {
-            retStr = state.status
+            "Status: ${state.status}"
         }
-
         is State.DoorState -> {
-            retStr = state.status + "\n" + state.lock
+            "Status: ${state.status}\nLock: ${state.lock}"
         }
-
         is State.SpeakerState -> {
-            retStr = state.status + "\n" + state.song.title
+            "Status: ${state.status}"
         }
-
         is State.BlindsState -> {
-            retStr = state.status
+            "Status: ${state.status}"
         }
-
         is State.DefaultState -> {
-            retStr = state.status
+            "Status: ${state.status}"
         }
     }
-
-    return retStr
 }
+
 
 @Composable
 fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .padding(10.dp)
-            .width(160.dp)
-            .height(160.dp)
+            .width(165.dp)
+            .height(180.dp)
             .clickable(onClick = onClick),
         colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
             contentColor = MaterialTheme.colorScheme.primary),
@@ -102,17 +93,31 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
+
             Row (
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                TitleDeviceCard(text = name)
             }
-            TitleDeviceCard(text = name)
-            Icon(painter = painterResource( getDrawableForDeviceType(type)),
-                contentDescription = "device",
-                Modifier.size(58.dp),
-                tint = MaterialTheme.colorScheme.primary )
-            TextDeviceCard(text = getDevStatusToStr(state))
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Icon(painter = painterResource( getDrawableForDeviceType(type)),
+                    contentDescription = "device",
+                    Modifier.size(58.dp),
+                    tint = MaterialTheme.colorScheme.primary )
+            }
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                TextDeviceCard(text = getDevStatusToStr(state))
+            }
+
         }
     }
 }
@@ -120,7 +125,7 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit ) {
 @Composable
 fun TitleDeviceCard(text: String) {
     androidx.compose.material3.Text(
-        modifier = Modifier.padding(5.dp),
+        modifier = Modifier.padding(horizontal = 5.dp),
         fontSize = 24.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
@@ -133,7 +138,7 @@ fun TitleDeviceCard(text: String) {
 fun TextDeviceCard(text: String) {
     androidx.compose.material3.Text(
         modifier = Modifier.padding(horizontal = 5.dp),
-        fontSize = 24.sp,
+        fontSize = 15.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
         fontFamily = kodchasan,

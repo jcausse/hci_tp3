@@ -51,9 +51,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
         configuration.screenWidthDp > 600
     }
 
-    if(!isTablet) {
-        if (isLandscape) {
-            currentDirection = NavIcons.ROUTINES
+        if (isLandscape || isTablet) {
+            currentDirection = if(!isTablet){NavIcons.ROUTINES}else{NavIcons.DEVICES}
             Row {
                 NavigationRail(
                     modifier = modifier.fillMaxHeight(),
@@ -144,55 +143,6 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 }
             }
         }
-    } else {
-        if (isLandscape) {
-            currentDirection = NavIcons.DEVICES
-            Row {
-                NavigationRail(
-                    modifier = modifier.fillMaxHeight(),
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    NavIcons.entries.forEach {
-                        NavigationRailItem(
-                            selected = currentDirection == it,
-                            onClick = { currentDirection = it },
-                            modifier = Modifier.padding(vertical = 16.dp),
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = it.icon),
-                                    contentDescription = stringResource(id = it.contentDescriptor),
-                                    tint = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                                )
-                            },
-                            label = {
-                                Text(
-                                    stringResource(id = it.label),
-                                    color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
-                                )
-                            }
-                        )
-                    }
-                }
-                when (currentDirection) {
-                    NavIcons.DEVICES -> DevicesTabletScreen(
-                        devicesViewModel.devicesState,
-                        isTablet
-                    )
-
-                    NavIcons.DASHBOARD -> DashboardScreen(
-                        devicesViewModel.recentDevices,
-                        devicesViewModel.devicesState
-                    )
-
-                    NavIcons.ROUTINES -> RoutinesLandscapeScreen(
-                        routinesViewModel.routinesState,
-                        modifier
-                    )
-                }
-            }
-
-        }
-    }
 }
 
 @Composable

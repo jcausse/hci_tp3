@@ -40,44 +40,6 @@ fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)
 }
 
 @Composable
-fun DevicesTabletScreen(
-    devicesState: DevicesState, isTablet: Boolean
-){
-    when ( devicesState ){
-        is DevicesState.Loading -> {
-            LoadingScreen()
-        }
-        is DevicesState.Success -> {
-            SuccessTabletScreen(devicesState.get.result, isTablet)
-        }
-        is DevicesState.Error -> {
-            ErrorScreen(devicesState.message)
-        }
-    }
-}
-
-@Composable
-fun SuccessTabletScreen(devices : ArrayList<DeviceResult>, isTablet : Boolean){
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ){
-        Title(text = "Devices")
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center, // Center vertically
-            horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
-        ) {
-            if (devices.isEmpty()){
-                Text(text = "Devices will appear here as you add them via the website.")
-            }
-            else{
-                CardGridDev(devices, null,isTablet)
-            }
-        }
-    }
-}
-
-@Composable
 fun LoadingScreen(){
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -112,7 +74,7 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> 
                 Text(text = "Devices will appear here as you add them via the website.")
             }
             else{
-                CardGridDev(devices, onDeviceClick,isTablet)
+                CardGridDev(devices, if(!isTablet){onDeviceClick}else{null},isTablet)
             }
         }
     }

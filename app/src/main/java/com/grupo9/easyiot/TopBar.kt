@@ -27,12 +27,6 @@ fun TopBarApp() {
             Text(text = stringResource(R.string.app_name))
                 },
         actions = {
-            Icon (
-                Icons.Default.Notifications,
-                contentDescription = stringResource(id = R.string.notifications),
-                modifier = Modifier.padding(16.dp),
-                tint = MaterialTheme.colorScheme.primaryContainer
-            )
         }
     )
 }

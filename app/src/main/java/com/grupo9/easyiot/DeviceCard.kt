@@ -60,7 +60,10 @@ private val spanishVersion= mapOf(
     "opened" to "abierto",
     "closed" to "cerrado",
     "on" to "encendido",
-    "off" to "apagado"
+    "off" to "apagado",
+    "playing" to "reproduciendo",
+    "stopped" to "frenado",
+    "paused" to "pausado",
 )
 
 fun getSpanishOrDefault(word: String, spanish:Boolean): String {

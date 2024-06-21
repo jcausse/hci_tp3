@@ -7,6 +7,12 @@
     <string name="bottom_navigation_routines">Rutinas</string>
     <string name="bottom_navigation_dashboard">Panel Central</string>
 
+    <string name="recent_devices">Dispositvos Recientes</string>
+    <string name="no_devices_message">Los dispositivos van a aparecer a medida a que se agreguen vía la página web.</string>
+    <string name="no_recent_devices_message">No hay dispositivos recientes!</string>
+    <string name="devices_error_msg">Error Cargando Dispositivos</string>
+    <string name="loading_msg">Cargando..</string>
+
     <string name="temperature">Temp</string>
     <string name="freezer_temperature">TempCong</string>
     <string name="mode">Modo</string>

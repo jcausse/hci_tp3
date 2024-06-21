@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.grupo9.easyiot.R
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.screens.DevicesState as DevicesState
 
@@ -16,17 +18,17 @@ fun DashboardScreen(recentDevices: SnapshotStateList<String>, devicesState: Devi
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Title(text = "Recent Devices")
+        Title(text = stringResource(R.string.recent_devices))
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
             if (devicesState !is DevicesState.Success){
-                Text(text = "Error loading devices")
+                Text(text = stringResource(R.string.devices_error_msg))
             }
             else if (recentDevices.size == 0) {
-                Text(text = "Devices will appear here as you interact with them.")
+                Text(text = stringResource(R.string.no_recent_devices_message))
             } else {
                 val recentDevicesDetails: ArrayList<DeviceResult> = ArrayList()
                 for (device in devicesState.get.result){

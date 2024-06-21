@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +35,7 @@ fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit)
             SuccessScreen(devicesState.get.result, onDeviceClick, isTablet)
         }
         is DevicesState.Error -> {
-            ErrorScreen(devicesState.message)
+            ErrorScreen()
         }
     }
 }
@@ -46,17 +47,17 @@ fun LoadingScreen(){
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  "loading...")
+        Text(text =  stringResource(R.string.loading_msg))
     }
 }
 @Composable
-fun ErrorScreen(message: String){
+fun ErrorScreen(){
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  message)
+        Text(text =  stringResource(R.string.devices_error_msg))
     }
 }
 @Composable
@@ -64,14 +65,14 @@ fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> 
     Column(
         modifier = Modifier.fillMaxSize()
     ){
-        Title(text = "Devices")
+        Title(text = stringResource(R.string.bottom_navigation_devices))
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
             if (devices.isEmpty()){
-                Text(text = "Devices will appear here as you add them via the website.")
+                Text(text = stringResource(R.string.no_devices_message))
             }
             else{
                 CardGridDev(devices, if(!isTablet){onDeviceClick}else{null},isTablet)

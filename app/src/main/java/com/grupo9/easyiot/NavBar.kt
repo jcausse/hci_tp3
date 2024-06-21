@@ -11,14 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.NavigationRailItemColors
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -113,6 +110,12 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
             }
 
         } else {
+            val myNavigationSuiteItemColors = NavigationSuiteDefaults.itemColors(
+                navigationBarItemColors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.primary
+                ),
+            )
+
             NavigationSuiteScaffold(
                 navigationSuiteColors = NavigationSuiteDefaults.colors(
                     navigationBarContainerColor = MaterialTheme.colorScheme.primary,
@@ -133,7 +136,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                                     stringResource(id = it.label),
                                     color = if (currentDirection == it) Color.Yellow else MaterialTheme.colorScheme.primaryContainer
                                 )
-                            },
+                            },colors = myNavigationSuiteItemColors,
                             selected = currentDirection == it,
                             onClick = { currentDirection = it }
                         )

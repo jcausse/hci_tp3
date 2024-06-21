@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -65,7 +64,7 @@ private val spanishVersion= mapOf(
 )
 
 fun getSpanishOrDefault(word: String, spanish:Boolean): String {
-    var toRet =
+    val toRet =
     if(!spanish) {
         word
     } else {

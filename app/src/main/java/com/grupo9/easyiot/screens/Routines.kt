@@ -82,11 +82,6 @@ fun RoutinesLandscapeScreen(
 
 
 @Composable
-fun RoutinesScreenPreview(){
-    RoutinesScreen(routinesState = RoutinesViewModel().routinesState )
-}
-
-@Composable
 fun ErrorRoutineScreen() {
     Text(text = "Error")
 }

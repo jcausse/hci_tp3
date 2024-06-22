@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,8 +31,12 @@ fun DevicesScreen(
     devicesState: DevicesState,
     onDeviceClick: ((String) -> Unit),
     isTablet: Boolean,
-    onDeviceDetailsClick: (id: String) -> Unit
+    onDeviceDetailsClick: (id: String) -> Unit,
+    refreshDevices: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        refreshDevices()
+    }
     when (devicesState) {
         is DevicesState.Loading -> {
             LoadingScreen()

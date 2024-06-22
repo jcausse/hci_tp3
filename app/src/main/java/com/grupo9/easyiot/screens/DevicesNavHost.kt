@@ -17,6 +17,7 @@ fun DevicesNavHostScreen(
     onDeviceClick: ((String) -> Unit),
     isTablet: Boolean,
     deviceDetailsViewModel: DeviceDetailsViewModel,
+    refreshDevices: () -> Unit,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -28,7 +29,8 @@ fun DevicesNavHostScreen(
                 devicesState,
                 onDeviceClick,
                 isTablet,
-                onDeviceDetailsClick = { id -> navController.navigate("devices/$id") }
+                onDeviceDetailsClick = { id -> navController.navigate("devices/$id") },
+                refreshDevices
             )
         }
         composable(

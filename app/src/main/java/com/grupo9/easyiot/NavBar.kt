@@ -51,6 +51,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
+    val refreshDevices = { devicesViewModel.getDevices() }
     val isTablet = if (isLandscape) {
         configuration.screenWidthDp > 900
     } else {
@@ -97,7 +98,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                         devicesViewModel.devicesState,
                         devicesViewModel::addRecent,
                         isTablet,
-                        deviceDetailsViewModel
+                        deviceDetailsViewModel,
+                        refreshDevices
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(
@@ -151,7 +153,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                         devicesViewModel.devicesState,
                         devicesViewModel::addRecent,
                         isTablet,
-                        deviceDetailsViewModel
+                        deviceDetailsViewModel,
+                        refreshDevices
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(

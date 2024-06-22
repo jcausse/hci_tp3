@@ -127,7 +127,7 @@ fun DoorDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
-        Lock()
+        //Lock()
     }
 }
 

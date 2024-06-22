@@ -39,4 +39,5 @@
     <string name="blinds_level">Level</string>
 
     <string name="default_status">Status</string>
+    <string name="notification_title">EasyIot</string>
 </resources>

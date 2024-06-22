@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation.suite.android)
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("com.godaddy.android.colorpicker:compose-color-picker:$color_picker_version")
+    implementation(libs.gson)
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

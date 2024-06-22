@@ -25,6 +25,7 @@ fun DeviceDetailsCard(
     onBrightnessChange: (Int) -> Unit,
     onLevelChange: (Int) -> Unit,
     onVolumeChange: (Int) -> Unit,
+    onChangeStatus: (Boolean) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -49,7 +50,8 @@ fun DeviceDetailsCard(
                 device,
                 { brightness -> onBrightnessChange(brightness) },
                 { level -> onLevelChange(level) },
-                { volume -> onVolumeChange(volume) }
+                { volume -> onVolumeChange(volume) },
+                { status -> onChangeStatus(status) },
             )
         }
     }

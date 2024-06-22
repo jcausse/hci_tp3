@@ -9,13 +9,13 @@ import com.grupo9.easyiot.model.device.DeviceDetails
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.network.DeviceDetailsApi
-import com.grupo9.easyiot.network.RoutineApi
 import kotlinx.coroutines.launch
 
 class DeviceDetailsViewModel() : ViewModel() {
     var deviceDetailsState: DeviceDetailsState by mutableStateOf(DeviceDetailsState.Loading)
         private set
     var changeBrightnessResult: Boolean by mutableStateOf(true)
+    var changeStatusResult: Boolean by mutableStateOf(true)
     var changeLevelResult: Boolean by mutableStateOf(true)
     var changeVolumeResult: Boolean by mutableStateOf(true)
 
@@ -37,29 +37,27 @@ class DeviceDetailsViewModel() : ViewModel() {
                 // Switch case used to access LampState
                 when (device.state) {
                     is State.LampState -> {
-                        // Create an updated state for the lamp
-                        val updatedState: State.LampState = State.LampState(
-                            (device.state as State.LampState).status,
-                            (device.state as State.LampState).color,
-                            brightness
-                        )
-                        // Create an updated device
-                        val updatedDevice = DeviceResult(
-                            device.id,
-                            device.name,
-                            device.type,
-                            updatedState,
-                            device.meta
-                        )
-                        DeviceDetailsApi.retorfitService.changeBrightness(device.id, updatedDevice)
+                        DeviceDetailsApi.retorfitService.changeBrightness(device.id, "setBrightness")
                     }
-                    else -> {
-                        false
-                    }
+                    else -> { false }
                 }
-            } catch (e: Exception) {
-                false
-            }
+            } catch (e: Exception) { false }
+        }
+    }
+
+    fun changeLampStatus(device: DeviceResult, status: Boolean) {
+        viewModelScope.launch {
+            changeStatusResult = try {
+                // Switch case used to access LampState
+                when (device.state) {
+                    is State.LampState -> {
+                        // Convert from Boolean to String
+                        val action = if (status) "turnOff" else "turnOn"
+                        DeviceDetailsApi.retorfitService.changeLampStatus(device.id, action)
+                    }
+                    else -> { false }
+                }
+            } catch (e: Exception) { false }
         }
     }
 
@@ -69,29 +67,11 @@ class DeviceDetailsViewModel() : ViewModel() {
                 // Switch case used to access LampState
                 when (device.state) {
                     is State.BlindsState -> {
-                        // Create an updated state for the lamp
-                        val updatedState: State.BlindsState = State.BlindsState(
-                            (device.state as State.BlindsState).status,
-                            (device.state as State.BlindsState).level,
-                            level
-                        )
-                        // Create an updated device
-                        val updatedDevice = DeviceResult(
-                            device.id,
-                            device.name,
-                            device.type,
-                            updatedState,
-                            device.meta
-                        )
-                        DeviceDetailsApi.retorfitService.changeLevel(device.id, updatedDevice)
+                        DeviceDetailsApi.retorfitService.changeLevel(device.id, "setLevel")
                     }
-                    else -> {
-                        false
-                    }
+                    else -> { false }
                 }
-            } catch (e: Exception) {
-                false
-            }
+            } catch (e: Exception) { false }
         }
     }
 
@@ -116,15 +96,12 @@ class DeviceDetailsViewModel() : ViewModel() {
                             updatedState,
                             device.meta
                         )
-                        DeviceDetailsApi.retorfitService.changeVolume(device.id, updatedDevice)
+                        val deviceDetails = DeviceDetails(result = updatedDevice)
+                        DeviceDetailsApi.retorfitService.changeVolume(device.id, deviceDetails)
                     }
-                    else -> {
-                        false
-                    }
+                    else -> { false }
                 }
-            } catch (e: Exception) {
-                false
-            }
+            } catch (e: Exception) { false }
         }
     }
 }

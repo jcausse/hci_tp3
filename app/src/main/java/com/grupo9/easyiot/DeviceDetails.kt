@@ -26,16 +26,52 @@ fun DeviceDetails(
     device: DeviceResult,
     onBrightnessChange: (Int) -> Unit,
     onLevelChange: (Int) -> Unit,
-    onVolumeChange: (Int) -> Unit
+    onVolumeChange: (Int) -> Unit,
+    onChangeStatus: (Boolean) -> Unit,
 ) {
     when (val state = device.state) {
-        is State.LampState -> { LampDetails(state, onBrightnessChange) }
-        is State.DoorState -> { DoorDetails(state) }
-        is State.BlindsState -> { BlindsDetails(state, onLevelChange) }
-        is State.SpeakerState -> { SpeakerDetails(state, onVolumeChange) }
-        is State.RefrigeratorState -> { RefrigeratorDetails(state) }
-        is State.FaucetState -> { FaucetDetails(state) }
-        is State.VacuumState -> { VacuumDetails(state) }
+        is State.LampState -> {
+            LampDetails(
+                state,
+                onBrightnessChange,
+                onChangeStatus
+            )
+        }
+        is State.DoorState -> {
+            DoorDetails(
+                state,
+                onChangeStatus
+            )
+        }
+        is State.BlindsState -> {
+            BlindsDetails(
+                state,
+                onLevelChange,
+                onChangeStatus
+            )
+        }
+        is State.SpeakerState -> {
+            SpeakerDetails(
+                state,
+                onVolumeChange,
+                onChangeStatus
+            )
+        }
+        is State.RefrigeratorState -> {
+            RefrigeratorDetails(state)
+        }
+        is State.FaucetState -> {
+            FaucetDetails(
+                state,
+                onChangeStatus
+            )
+        }
+        is State.VacuumState -> {
+            VacuumDetails(
+                state,
+                onChangeStatus
+                )
+        }
     }
 }
 
@@ -45,43 +81,44 @@ fun DeviceDetails(
 @Composable
 fun LampDetails(
     state: State.LampState,
-    onBrightnessChange: (Int) -> Unit
+    onBrightnessChange: (Int) -> Unit,
+    onChangeStatus: (Boolean) -> Unit,
 ) {
     Column {
-        StateSwitch(turnedOn = (state.status == "On"))
+        StateSwitch(
+            turnedOn = (state.status == "on"),
+            onChangeStatus = onChangeStatus
+            )
         IntensitySlider(state.brightness, onBrightnessChange)
     }
 }
 //***************************************************************************//
 @Composable
-fun StateSwitch(turnedOn: Boolean) {
+fun StateSwitch(
+    turnedOn: Boolean,
+    onChangeStatus: (Boolean) -> Unit
+) {
     var checked by remember { mutableStateOf(false) }
-    //Column(
-    //    modifier = Modifier
-    //        .padding(20.dp)
-    //) {
-        Row (
-            modifier = Modifier
-                .padding(20.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                "Status: ",
-                fontSize = 30.sp,
-                modifier = Modifier.weight(1f)
-            )
-            Switch(
-                checked = turnedOn,
-                onCheckedChange = {
-                    checked = it
-                }
-            )
-
-
-        }
-    //}
+    Row (
+        modifier = Modifier
+            .padding(20.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            "Status: ",
+            fontSize = 30.sp,
+            modifier = Modifier.weight(1f)
+        )
+        Switch(
+            checked = turnedOn,
+            onCheckedChange = {
+                checked = it
+                onChangeStatus(it)
+            }
+        )
+    }
 }
 
 @Composable
@@ -111,13 +148,24 @@ fun IntensitySlider(
     }
 }
 
+@Composable
+fun ColorPicker() {
+    // TODO: https://github.com/skydoves/colorpicker-compose
+}
+
 //***************************************************************************//
 //                                    Door                                   //
 //***************************************************************************//
 @Composable
-fun DoorDetails(state: State.DoorState) {
+fun DoorDetails(
+    state: State.DoorState,
+    onChangeStatus: (Boolean) -> Unit
+) {
     Column {
-        StateSwitch(turnedOn = (state.status == "On"))
+        StateSwitch(
+            turnedOn = (state.status == "on"),
+            onChangeStatus = onChangeStatus
+        )
         //    @SerialName("lock") val lock: String
     }
 }
@@ -128,13 +176,15 @@ fun DoorDetails(state: State.DoorState) {
 @Composable
 fun BlindsDetails(
     state: State.BlindsState,
-    onLevelChange: (Int) -> Unit
+    onLevelChange: (Int) -> Unit,
+    onChangeStatus: (Boolean) -> Unit
 ) {
     Column {
-        StateSwitch(turnedOn = (state.status == "on"))
-        BlindsLevelSlider(level = state.level, onLevelChange)
-        //    @SerialName("level") val level: Int,
-        //    @SerialName("currentLevel") val currentLevel: Int
+        StateSwitch(
+            turnedOn = (state.status == "on"),
+            onChangeStatus = onChangeStatus
+        )
+        BlindsLevelSlider(level = state.level, onLevelChange) // TODO: is this current level or level??
     }
 }
 //***************************************************************************//
@@ -170,10 +220,14 @@ fun BlindsLevelSlider(
 @Composable
 fun SpeakerDetails(
     state: State.SpeakerState,
-    onVolumeChange: (Int) -> Unit
+    onVolumeChange: (Int) -> Unit,
+    onChangeStatus: (Boolean) -> Unit
 ) {
     Column {
-        StateSwitch(turnedOn = (state.status == "on"))
+        StateSwitch(
+            turnedOn = (state.status == "on"),
+            onChangeStatus = onChangeStatus
+        )
         VolumeSlider(level = state.volume, onVolumeChange)
         Text("Genre: ${state.genre}")
         Text("Song: ${state.song}") // ???
@@ -224,9 +278,15 @@ fun RefrigeratorDetails(state: State.RefrigeratorState) {
 //                                  Faucet                                   //
 //***************************************************************************//
 @Composable
-fun FaucetDetails(state: State.FaucetState) {
+fun FaucetDetails(
+    state: State.FaucetState,
+    onChangeStatus: (Boolean) -> Unit
+) {
     Column {
-        StateSwitch(turnedOn = (state.status == "on"))
+        StateSwitch(
+            turnedOn = (state.status == "on"),
+            onChangeStatus = onChangeStatus
+        )
     }
 }
 
@@ -234,9 +294,15 @@ fun FaucetDetails(state: State.FaucetState) {
 //                                  Vacuum                                   //
 //***************************************************************************//
 @Composable
-fun VacuumDetails(state: State.VacuumState) {
+fun VacuumDetails(
+    state: State.VacuumState,
+    onChangeStatus: (Boolean) -> Unit
+) {
     Column {
-        StateSwitch(turnedOn = (state.status == "active"))
+        StateSwitch(
+            turnedOn = (state.status == "active"),
+            onChangeStatus = onChangeStatus
+        )
         //    @SerialName("mode") val mode: String,
         //    @SerialName("batteryLevel") val batteryLevel: Int,
         //    @SerialName("location") val location: Location
@@ -248,7 +314,7 @@ fun VacuumDetails(state: State.VacuumState) {
 }
 
 
-/* @Composable
+/* TODO: @Composable
 fun ChangeDevice(id: String, name: String, onDismiss: () -> Unit, routinesViewModel: RoutinesViewModel = RoutinesViewModel()) {
 
     routinesViewModel.executeRoutine(id)

@@ -7,3 +7,8 @@ import kotlinx.serialization.Serializable
 data class DeviceDetails (
     @SerialName("result") var result : DeviceResult
 )
+
+@Serializable
+data class Brightness (
+    @SerialName("brightness") var brightness: Int
+)

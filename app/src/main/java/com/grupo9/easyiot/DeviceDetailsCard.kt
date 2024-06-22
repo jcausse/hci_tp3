@@ -23,7 +23,8 @@ import com.grupo9.easyiot.model.device.DeviceResult
 fun DeviceDetailsCard(
     device : DeviceResult,
     onExecuteAction: (Int, String) -> Unit,
-    onChangeStatus: (Boolean) -> Unit
+    onExecuteActionWithoutParameter: (String) -> Unit,
+    onChangeStatus: (Boolean) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -47,7 +48,8 @@ fun DeviceDetailsCard(
             DeviceDetails(
                 device,
                 onExecuteAction,
-                onChangeStatus
+                onChangeStatus,
+                onExecuteActionWithoutParameter
             )
         }
     }

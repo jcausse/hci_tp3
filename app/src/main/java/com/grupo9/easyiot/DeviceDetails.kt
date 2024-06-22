@@ -1,12 +1,21 @@
 package com.grupo9.easyiot
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,18 +25,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
-import kotlin.math.round
+import com.grupo9.easyiot.ui.theme.Purple40
+import com.grupo9.easyiot.ui.theme.Purple80
 
 @Composable
 fun DeviceDetails(
     device: DeviceResult,
     onExecuteAction: (Int, String) -> Unit,
-    onChangeStatus: (Boolean) -> Unit
+    onChangeStatus: (Boolean) -> Unit,
+    onExecuteActionWithoutParameter: (String) -> Unit
 ) {
     when (val state = device.state) {
         is State.LampState -> {
@@ -40,7 +52,12 @@ fun DeviceDetails(
             BlindsDetails(state, onExecuteAction, onChangeStatus)
         }
         is State.SpeakerState -> {
-            SpeakerDetails(state, onExecuteAction, onChangeStatus)
+            SpeakerDetails(
+                state,
+                onExecuteAction,
+                onExecuteActionWithoutParameter,
+                onChangeStatus
+            )
         }
         is State.RefrigeratorState -> {
             RefrigeratorDetails(state, onExecuteAction)
@@ -70,7 +87,11 @@ fun LampDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
             )
-        DeviceSlider(state.brightness, stringResource(R.string.lamp_brightness), { value -> onExecuteAction(value, "setBrightness")})
+        DeviceSlider(
+            state.brightness,
+            stringResource(R.string.lamp_brightness),
+            "%",
+            { value -> onExecuteAction(value, "setBrightness")})
     }
 }
 //***************************************************************************//
@@ -89,7 +110,7 @@ fun DoorDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "on"),
+            status = (state.status == "open"),
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
@@ -112,7 +133,12 @@ fun BlindsDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
-        DeviceSlider(state.level, stringResource(R.string.blinds_level), { value -> onExecuteAction(value, "setLevel")})
+        DeviceSlider(
+            state.level,
+            stringResource(R.string.blinds_level),
+            "%",
+            { value -> onExecuteAction(value, "setLevel")}
+        )
     }
 }
 
@@ -123,26 +149,116 @@ fun BlindsDetails(
 fun SpeakerDetails(
     state: State.SpeakerState,
     onExecuteAction: (Int, String) -> Unit,
+    onExecuteActionWithoutParameter: (String) -> Unit,
     onChangeStatus: (Boolean) -> Unit
 ) {
     Column {
-        StateSwitch(
-            status = (state.status == "on"),
-            statusText = state.status,
-            onChangeStatus = onChangeStatus
+        Song(
+            state.song.title,
+            parseTimeString(state.song.duration),
+            parseTimeString(state.song.progress),
+            onExecuteActionWithoutParameter,
+            onChangeStatus
         )
-        DeviceSlider(state.volume, stringResource(R.string.speaker_volume), { value -> onExecuteAction(value, "setVolume")})
-        Text("Genre: ${state.genre}")
-        Text("Song: ${state.song}")
+        DeviceSlider(
+            state.volume,
+            stringResource(R.string.speaker_volume),
+            "%",
+            { value -> onExecuteAction(value, "setVolume") }
+        )
+        Column (
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text("Artist: ${state.song.artist}")
+            Text("Album: ${state.song.album}")
+            Text("Genre: ${state.genre}")
+        }
     }
-    // Song
-//      @SerialName("title") val title: String,
-//      @SerialName("artist") val artist: String,
-//      @SerialName("album") val album: String,
-//      @SerialName("duration") val duration: String,
-//      @SerialName("progress") val progress: String
 }
 
+fun parseTimeString(timeString: String): Int {
+    val parts = timeString.split(":")
+    if (parts.size != 2) {
+        throw NumberFormatException("Invalid time format")
+    }
+    val minutes = parts[0].toIntOrNull() ?: 0
+    val seconds = parts[1].toIntOrNull() ?: 0
+    return minutes * 60 + seconds
+}
+
+@Composable
+fun Song(
+    title: String,
+    duration: Int,
+    progress: Int,
+    onExecuteActionWithoutParameter: (String) -> Unit,
+    onChangeStatus: (Boolean) -> Unit
+) {
+    var isPlaying by remember { mutableStateOf(false) }
+    var currentSong by remember { mutableStateOf(title) }
+    var sliderPosition by remember { mutableStateOf(progress) }
+
+    Column (
+        modifier = Modifier
+            .padding(12.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Song controller (play, pause, ...)
+        Text("Title: ${currentSong}")
+        Slider(
+            value = sliderPosition.toFloat(),
+            onValueChange = {
+                sliderPosition = it.toInt()
+            },
+            valueRange = 0f..duration.toFloat(),
+            colors = SliderDefaults.colors(
+                thumbColor = Purple40,
+                activeTrackColor = Purple40,
+                inactiveTrackColor = Purple80
+            )
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = { onExecuteActionWithoutParameter("previousSong") }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.skip_previous),
+                    contentDescription = "Previous Song"
+                )
+            }
+            IconButton(
+                modifier = Modifier.size(25.dp),
+                onClick = {
+                    isPlaying = !isPlaying
+                    onChangeStatus(isPlaying)
+                }
+            ) {
+                Icon(
+                    painter = if (isPlaying) painterResource(R.drawable.pause) else painterResource(R.drawable.play),
+                    contentDescription = if (isPlaying) "Pause" else "Play"
+                )
+            }
+            IconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = { onExecuteActionWithoutParameter("nextSong") }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.skip_next),
+                    contentDescription = "Next Song"
+                )
+            }
+        }
+    }
+}
 //***************************************************************************//
 //                               Refrigerator                                //
 //***************************************************************************//
@@ -152,8 +268,17 @@ fun RefrigeratorDetails(
     onExecuteAction: (Int, String) -> Unit,
 ) {
     Column {
-        DeviceSlider(state.temperature, stringResource(R.string.temperature), { value -> onExecuteAction(value, "setTemperature")})
-        DeviceSlider(state.freezerTemperature, stringResource(R.string.freezer_temperature), { value -> onExecuteAction(value, "setFreezerTemperature")})
+        DeviceSlider(
+            state.temperature,
+            stringResource(R.string.temperature),
+            " Cº",
+            { value -> onExecuteAction(value, "setTemperature")})
+        DeviceSlider(
+            state.freezerTemperature,
+            stringResource(R.string.freezer_temperature),
+            " Cº",
+            { value -> onExecuteAction(value, "setFreezerTemperature")}
+        )
         //    @SerialName("mode") val mode: String
     }
 }
@@ -168,7 +293,7 @@ fun FaucetDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "on"),
+            status = (state.status == "open"),
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
@@ -203,25 +328,23 @@ fun VacuumDetails(
     }
 }
 
-
-/* TODO: @Composable
-fun ChangeDevice(id: String, name: String, onDismiss: () -> Unit, routinesViewModel: RoutinesViewModel = RoutinesViewModel()) {
-
-    routinesViewModel.executeRoutine(id)
-    val executeResult  = routinesViewModel.executeResult
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(name) },
-        text = { Text(if ( executeResult ) "Executed Routine Successfully" else "Error executing routine") },
-        confirmButton = {
-            Button(onClick = onDismiss) {
-                Text("OK")
+@Composable
+fun ErrorExecutingAction(
+    success: Boolean,
+    onDismiss: () -> Unit
+) {
+    if (!success) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            text = { Text("Error executing action") },
+            confirmButton = {
+                Button(onClick = onDismiss) {
+                    Text("OK")
+                }
             }
-        }
-    )
-} */
-
+        )
+    }
+}
 
 @Composable
 fun StateSwitch(
@@ -230,9 +353,10 @@ fun StateSwitch(
     onChangeStatus: (Boolean) -> Unit
 ) {
     var checked by remember { mutableStateOf(status) }
+
     Row (
         modifier = Modifier
-            .padding(15.dp)
+            .padding(25.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -247,7 +371,7 @@ fun StateSwitch(
                 checked = checked,
                 onCheckedChange = {
                     checked = it
-                    onChangeStatus(it)
+                    onChangeStatus(checked)
                 }
             )
             Text(statusText)
@@ -259,9 +383,11 @@ fun StateSwitch(
 fun DeviceSlider(
     value: Int,
     valueText: String,
+    symbol: String,
     onSliderChange: (Int) -> Unit
 ) {
     var sliderPosition by remember { mutableStateOf(value.toFloat()) }
+
     Column(
         modifier = Modifier
             .padding(25.dp)
@@ -277,9 +403,9 @@ fun DeviceSlider(
                 sliderPosition = it
             },
             valueRange = 0f..100f,
-            onValueChangeFinished = { onSliderChange(sliderPosition.toInt()) }
+            onValueChangeFinished = { onSliderChange(sliderPosition.toInt()) },
         )
-        Text(text = "${(sliderPosition).toInt()}%")
+        Text(text = "${(sliderPosition).toInt()}${symbol}")
     }
 }
 

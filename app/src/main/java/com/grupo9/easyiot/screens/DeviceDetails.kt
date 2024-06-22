@@ -21,6 +21,8 @@ fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
                 device = result,
                 onExecuteAction = { device, value, action
                     -> deviceDetailsViewModel.executeAction(result.id, action, value) },
+                onExecuteActionWithoutParameter = { device, action
+                    -> deviceDetailsViewModel.executeActionWithoutParameters(result.id, action) },
                 onChangeStatus = { device, status
                     -> deviceDetailsViewModel.changeStatus(result, status) }
             )
@@ -35,6 +37,7 @@ fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
 fun DeviceDetailsSuccessScreen(
     device : DeviceResult,
     onExecuteAction: (DeviceResult, Int, String) -> Unit,
+    onExecuteActionWithoutParameter: (DeviceResult, String) -> Unit,
     onChangeStatus: (DeviceResult, Boolean) -> Unit,
 ) {
     Column(
@@ -46,6 +49,7 @@ fun DeviceDetailsSuccessScreen(
         DeviceDetailsCard(
             device = device,
             onExecuteAction = { value, action -> onExecuteAction(device, value, action) },
+            onExecuteActionWithoutParameter = { action -> onExecuteActionWithoutParameter(device, action) },
             onChangeStatus = { status -> onChangeStatus(device, status) },
         )
     }

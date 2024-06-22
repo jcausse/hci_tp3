@@ -54,34 +54,17 @@ interface DeviceDetailsApiService {
     ): ExecuteActionResult
 
     @PUT("devices/{id}/{actionName}")
-    suspend fun changeBrightness(
+    suspend fun executeActionWithoutParameters(
         @Path("id") id: String,
         @Path("actionName") action: String
-    ): Boolean
+    ): ExecuteActionResult
 
     @PUT("devices/{id}/{actionName}")
-    suspend fun changeLampStatus(
+    suspend fun changeStatus(
         @Path("id") id: String,
         @Path("actionName") action: String
     ): Boolean
 
-    @PUT("devices/{id}")
-    suspend fun changeLevel(
-        @Path("id") id: String,
-        @Path("actionName") action: String
-    ): Boolean
-
-    @PUT("devices/{id}")
-    suspend fun changeVolume(
-        @Path("id") id: String,
-        @Body device: DeviceDetails
-    ): Boolean
-
-    @PUT("devices/{id}")
-    suspend fun changeSpeakerStatus(
-        @Path("id") id: String,
-        @Body device: DeviceDetails
-    ): Boolean
 }
 
 object DeviceDetailsApi {

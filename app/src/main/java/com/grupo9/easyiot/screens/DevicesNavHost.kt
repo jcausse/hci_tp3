@@ -1,15 +1,13 @@
 package com.grupo9.easyiot.screens
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.grupo9.easyiot.screens.DeviceDetailsScreen
-import com.grupo9.easyiot.screens.DevicesScreen
+
 
 @Composable
 fun DevicesNavHostScreen(
@@ -17,6 +15,7 @@ fun DevicesNavHostScreen(
     onDeviceClick: ((String) -> Unit),
     isTablet: Boolean,
     deviceDetailsViewModel: DeviceDetailsViewModel,
+    refreshDevices: () -> Unit,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -28,7 +27,8 @@ fun DevicesNavHostScreen(
                 devicesState,
                 onDeviceClick,
                 isTablet,
-                onDeviceDetailsClick = { id -> navController.navigate("devices/$id") }
+                onDeviceDetailsClick = { id -> navController.navigate("devices/$id") },
+                refreshDevices
             )
         }
         composable(

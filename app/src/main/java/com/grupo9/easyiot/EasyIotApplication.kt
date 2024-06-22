@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.grupo9.easyiot.receivers.ServerEventReceiver
+import com.grupo9.easyiot.network.NOTIFICATION_POLL_TIME_MS
 
 class EasyIotApplication : Application() {
     override fun onCreate() {
@@ -21,8 +22,8 @@ class EasyIotApplication : Application() {
     }
     private fun createNotificationChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Device Notifications"
-            val descriptionText = "Device notifications"
+            val name = getString(R.string.notification_channel_title)
+            val descriptionText = getString(R.string.notification_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply{
                 description = descriptionText
@@ -48,14 +49,13 @@ class EasyIotApplication : Application() {
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             SystemClock.currentThreadTimeMillis(),
-            INTERVAL,
+            NOTIFICATION_POLL_TIME_MS,
             pendingIntent
         )
-        Log.d(TAG, "Alarm set every $INTERVAL millis")
+        Log.d(TAG, "Alarm set every $NOTIFICATION_POLL_TIME_MS millis")
     }
     companion object {
         const val TAG = "EasyIotApplication"
         const val CHANNEL_ID = "device"
-        const val INTERVAL: Long = 1000 * 60
     }
 }

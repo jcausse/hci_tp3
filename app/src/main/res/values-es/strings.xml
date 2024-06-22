@@ -27,4 +27,6 @@
 
     <string name="default_status">Estado</string>
     <string name="notification_title">EasyIot</string>
+    <string name="notification_channel_title">Actualizaciones de Dispositivos</string>
+    <string name="notification_channel_description">Permita que EasyIot le informe acerca de cambios en el estado de sus dispositivos</string>
 </resources>

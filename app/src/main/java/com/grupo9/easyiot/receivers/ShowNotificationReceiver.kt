@@ -36,7 +36,7 @@ class ShowNotificationReceiver : BroadcastReceiver() {
             )
 
         val builder = NotificationCompat.Builder(context, EasyIotApplication.CHANNEL_ID)
-            .setSmallIcon(R.drawable.applogo)
+            .setSmallIcon(R.drawable.notification_logo)
             .setContentTitle(context.getString(R.string.notification_title))
             .setContentText("Prueba123"/*context.getString(R.string.notification_text)*/) // TODO
             .setStyle(

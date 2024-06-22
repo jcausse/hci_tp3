@@ -346,8 +346,8 @@ fun RefrigeratorDetails(
         DeviceSlider(
             state.temperature,
             stringResource(R.string.temperature),
-            -20f,
-            -8f,
+            2f,
+            8f,
             " Cº",
             { value -> onExecuteAction(value, "setTemperature")})
         DeviceSlider(

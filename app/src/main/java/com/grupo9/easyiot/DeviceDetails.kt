@@ -123,7 +123,7 @@ fun DoorDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "open"),
+            status = (state.status == "opened"),
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
@@ -354,7 +354,7 @@ fun FaucetDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "open"),
+            status = (state.status == "opened"),
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )

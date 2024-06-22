@@ -34,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.ui.theme.Purple40
@@ -127,7 +126,7 @@ fun DoorDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
-        Lock()
+        Lock(state, onChangeStatus)
     }
 }
 
@@ -136,12 +135,12 @@ fun Lock(
     state: State.DoorState,
     onTriggerLock: (Boolean) -> Unit
 ) {
-    var locked by remember { mutableStateOf(state.lock == "locked")}
+    var locked by remember(state.lock) { mutableStateOf(state.lock == "locked")}
 
-    Row (
+    Row(
         modifier = Modifier
-        .padding(25.dp)
-        .fillMaxWidth(),
+            .padding(25.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

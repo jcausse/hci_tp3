@@ -62,7 +62,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
         factory = DevicesViewModelFactory(isTablet)
     )
 
-        if (isLandscape || isTablet) {
+    if (isLandscape || isTablet) {
             currentDirection = if(!isTablet){NavIcons.ROUTINES}else{NavIcons.DEVICES}
             Row {
                 NavigationRail(

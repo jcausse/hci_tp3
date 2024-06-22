@@ -93,14 +93,10 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                     }
                 }
                 when (currentDirection) {
-
-                    /* NavIcons.DEVICES -> DevicesScreen( // TODO: Fix this
-                        devicesViewModel.devicesState,
-                        devicesViewModel::addRecent,
-                        isTablet
-                    ) */
                     NavIcons.DEVICES -> DevicesNavHostScreen(
                         devicesViewModel.devicesState,
+                        devicesViewModel::addRecent,
+                        isTablet,
                         deviceDetailsViewModel
                     )
 
@@ -151,13 +147,10 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 modifier = modifier
             ) {
                 when (currentDirection) {
-                    /*NavIcons.DEVICES -> DevicesScreen(
-                        devicesViewModel.devicesState, // TODO: devicesViewModel
-                        devicesViewModel::addRecent,
-                        isTablet
-                    )*/
                     NavIcons.DEVICES -> DevicesNavHostScreen(
-                        devicesViewModel.devicesState, // TODO: devicesViewModel
+                        devicesViewModel.devicesState,
+                        devicesViewModel::addRecent,
+                        isTablet,
                         deviceDetailsViewModel
                     )
 

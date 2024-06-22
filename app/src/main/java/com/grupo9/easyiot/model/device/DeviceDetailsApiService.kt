@@ -9,6 +9,6 @@ data class DeviceDetails (
 )
 
 @Serializable
-data class Brightness (
-    @SerialName("brightness") var brightness: Int
+data class ExecuteActionResult (
+    @SerialName("result") var result: Boolean
 )

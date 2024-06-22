@@ -2,6 +2,7 @@ package com.grupo9.easyiot.network
 
 import com.grupo9.easyiot.model.device.DeviceDetails
 import com.grupo9.easyiot.model.device.Devices
+import com.grupo9.easyiot.model.device.ExecuteActionResult
 import com.grupo9.easyiot.model.routines.ExtecuteResult
 import com.grupo9.easyiot.model.routines.Routines
 import okhttp3.MediaType.Companion.toMediaType
@@ -45,9 +46,13 @@ interface DeviceDetailsApiService {
     @GET("devices/{id}")
     suspend fun getDevice(@Path("id") id: String) : DeviceDetails
 
-    // setVolume
-    // "name": "volume",
-    // "type": "number",
+    @PUT("devices/{id}/{actionName}")
+    suspend fun executeAction(
+        @Path("id") id: String,
+        @Path("actionName") action: String,
+        @Body value: Int // TODO: Instead of value...
+    ): ExecuteActionResult
+
     @PUT("devices/{id}/{actionName}")
     suspend fun changeBrightness(
         @Path("id") id: String,

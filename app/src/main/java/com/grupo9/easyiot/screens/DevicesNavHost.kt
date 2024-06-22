@@ -14,6 +14,8 @@ import com.grupo9.easyiot.screens.DevicesScreen
 @Composable
 fun DevicesNavHostScreen(
     devicesState: DevicesState,
+    onDeviceClick: ((String) -> Unit),
+    isTablet: Boolean,
     deviceDetailsViewModel: DeviceDetailsViewModel,
     navController: NavHostController = rememberNavController()
 ) {
@@ -24,7 +26,9 @@ fun DevicesNavHostScreen(
         composable("devices") {
             DevicesScreen(
                 devicesState,
-                onDeviceClick = { id -> navController.navigate("devices/$id") }
+                onDeviceClick,
+                isTablet,
+                onDeviceDetailsClick = { id -> navController.navigate("devices/$id") }
             )
         }
         composable(

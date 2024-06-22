@@ -45,7 +45,7 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 
-private val spanishVersion= mapOf(
+private val spanishVersion = mapOf(
     "default" to "predeterminado",
     "vacation" to "vacaciones",
     "party" to "fiesta",

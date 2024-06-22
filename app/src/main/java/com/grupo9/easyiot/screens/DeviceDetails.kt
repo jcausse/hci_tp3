@@ -11,7 +11,6 @@ import com.grupo9.easyiot.model.device.DeviceResult
 
 @Composable
 fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
-
     when (val state = deviceDetailsViewModel.deviceDetailsState) {
         is DeviceDetailsState.Loading -> {
             LoadingScreen()
@@ -19,15 +18,15 @@ fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
         is DeviceDetailsState.Success -> {
             val result = state.get.result
             DeviceDetailsSuccessScreen(
-                result,
-                onBrightnessChange = { device, brightness -> deviceDetailsViewModel.changeBrightness(result, brightness) },
-                onLevelChange = { device, level -> deviceDetailsViewModel.changeLevel(result, level) },
-                onVolumeChange = { device, volume -> deviceDetailsViewModel.changeVolume(result, volume) },
-                onChangeStatus = { device, status -> deviceDetailsViewModel.changeLampStatus(result, status) }
+                device = result,
+                onExecuteAction = { device, value, action
+                    -> deviceDetailsViewModel.executeAction(result.id, action, value) },
+                onChangeStatus = { device, status
+                    -> deviceDetailsViewModel.changeStatus(result, status) }
             )
         }
         is DeviceDetailsState.Error -> {
-            ErrorScreen(state.message)
+            ErrorScreen()
         }
     }
 }
@@ -35,9 +34,7 @@ fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
 @Composable
 fun DeviceDetailsSuccessScreen(
     device : DeviceResult,
-    onBrightnessChange: (DeviceResult, Int) -> Unit,
-    onLevelChange: (DeviceResult, Int) -> Unit,
-    onVolumeChange: (DeviceResult, Int) -> Unit,
+    onExecuteAction: (DeviceResult, Int, String) -> Unit,
     onChangeStatus: (DeviceResult, Boolean) -> Unit,
 ) {
     Column(
@@ -47,10 +44,8 @@ fun DeviceDetailsSuccessScreen(
     ) {
         Title(text = device.name)
         DeviceDetailsCard(
-            device,
-            onBrightnessChange = { brightness -> onBrightnessChange(device, brightness) },
-            onLevelChange = { level -> onLevelChange(device, level) },
-            onVolumeChange = { volume -> onVolumeChange(device, volume) },
+            device = device,
+            onExecuteAction = { value, action -> onExecuteAction(device, value, action) },
             onChangeStatus = { status -> onChangeStatus(device, status) },
         )
     }

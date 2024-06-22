@@ -22,10 +22,8 @@ import com.grupo9.easyiot.model.device.DeviceResult
 @Composable
 fun DeviceDetailsCard(
     device : DeviceResult,
-    onBrightnessChange: (Int) -> Unit,
-    onLevelChange: (Int) -> Unit,
-    onVolumeChange: (Int) -> Unit,
-    onChangeStatus: (Boolean) -> Unit,
+    onExecuteAction: (Int, String) -> Unit,
+    onChangeStatus: (Boolean) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -48,10 +46,8 @@ fun DeviceDetailsCard(
             DeviceIcon(device.type.name, 45.dp, 55.dp, 108.dp)
             DeviceDetails(
                 device,
-                { brightness -> onBrightnessChange(brightness) },
-                { level -> onLevelChange(level) },
-                { volume -> onVolumeChange(volume) },
-                { status -> onChangeStatus(status) },
+                onExecuteAction,
+                onChangeStatus
             )
         }
     }

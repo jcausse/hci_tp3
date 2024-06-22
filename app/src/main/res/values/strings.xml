@@ -25,6 +25,7 @@
 
     <string name="door_lock">Lock</string>
 
+    <string name="speaker_volume">Volume</string>
     <string name="speaker_song">Song</string>
     <string name="speaker_artist">By</string>
 

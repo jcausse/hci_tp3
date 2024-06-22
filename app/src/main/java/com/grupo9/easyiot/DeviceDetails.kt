@@ -1,8 +1,8 @@
 package com.grupo9.easyiot
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,10 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
@@ -25,10 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.ui.theme.Purple40
@@ -81,6 +87,7 @@ fun LampDetails(
     onExecuteAction: (Int, String) -> Unit,
     onChangeStatus: (Boolean) -> Unit,
 ) {
+    var lightColor by remember { mutableStateOf(state.color) }
     Column {
         StateSwitch(
             status = (state.status == "on"),
@@ -91,13 +98,19 @@ fun LampDetails(
             state.brightness,
             stringResource(R.string.lamp_brightness),
             "%",
-            { value -> onExecuteAction(value, "setBrightness")})
+            { value -> onExecuteAction(value, "setBrightness")}
+        )
+        // TODO: ChangeOnExecute Action --> color needs to be a string
+        /*
+        ClassicColorPicker(
+            color = Color,
+            onColorChanged = { color: HsvColor ->
+                lightColor = color.toString()
+                onExecuteAction(lightColor.toInt(), "setColor")
+            }
+        )
+        */
     }
-}
-//***************************************************************************//
-@Composable
-fun ColorPicker() {
-    // TODO: https://github.com/skydoves/colorpicker-compose
 }
 
 //***************************************************************************//
@@ -114,7 +127,50 @@ fun DoorDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
-        //    @SerialName("lock") val lock: String
+        Lock()
+    }
+}
+
+@Composable
+fun Lock(
+    state: State.DoorState,
+    onTriggerLock: (Boolean) -> Unit
+) {
+    var locked by remember { mutableStateOf(state.lock == "locked")}
+
+    Row (
+        modifier = Modifier
+        .padding(25.dp)
+        .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            "State: ${if(locked){"Locked"}else{"Unlocked"}}",
+            fontSize = 20.sp,
+            modifier = Modifier
+        )
+        Column {
+            Button(
+                onClick = {
+                    locked = !locked
+                    onTriggerLock(locked)
+                },
+                modifier = Modifier.padding(8.dp),
+                colors = if (locked) {
+                    ButtonDefaults.buttonColors(Color.Green)
+                } else {
+                    ButtonDefaults.buttonColors(Color.Red)
+                }
+            ) {
+                Icon(
+                    Icons.Filled.Lock,
+                    contentDescription = "Lock Icon",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
     }
 }
 
@@ -168,7 +224,7 @@ fun SpeakerDetails(
         )
         Column (
             modifier = Modifier
-                .padding(10.dp)
+                .padding(15.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -204,12 +260,19 @@ fun Song(
     Column (
         modifier = Modifier
             .padding(12.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(
+                color = com.grupo9.easyiot.ui.theme.Purple120,
+                shape = RoundedCornerShape(8.dp)
+            ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Song controller (play, pause, ...)
-        Text("Title: ${currentSong}")
+        Text(
+            "Title: ${currentSong}",
+            fontSize = 20.sp,
+            modifier = Modifier.padding(top = 13.dp)
+        )
         Slider(
             value = sliderPosition.toFloat(),
             onValueChange = {
@@ -220,42 +283,40 @@ fun Song(
                 thumbColor = Purple40,
                 activeTrackColor = Purple40,
                 inactiveTrackColor = Purple80
-            )
+            ),
+            modifier = Modifier.padding(10.dp)
         )
         Row(
+            modifier = Modifier.padding(bottom = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = { onExecuteActionWithoutParameter("previousSong") }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.skip_previous),
-                    contentDescription = "Previous Song"
-                )
-            }
-            IconButton(
-                modifier = Modifier.size(25.dp),
-                onClick = {
-                    isPlaying = !isPlaying
-                    onChangeStatus(isPlaying)
-                }
-            ) {
-                Icon(
-                    painter = if (isPlaying) painterResource(R.drawable.pause) else painterResource(R.drawable.play),
-                    contentDescription = if (isPlaying) "Pause" else "Play"
-                )
-            }
-            IconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = { onExecuteActionWithoutParameter("nextSong") }
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.skip_next),
-                    contentDescription = "Next Song"
-                )
-            }
+            Icon(
+                painter = painterResource(R.drawable.skip_previous),
+                contentDescription = "Previous Song",
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable {
+                        onExecuteActionWithoutParameter("previousSong")
+                    }
+            )
+            Icon(
+                painter = if (isPlaying) painterResource(R.drawable.pause) else painterResource(R.drawable.play),
+                contentDescription = if (isPlaying) "Pause" else "Play",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable {
+                        isPlaying = !isPlaying
+                        onChangeStatus(isPlaying)
+                    }
+            )
+            Icon(
+                painter = painterResource(R.drawable.skip_next),
+                contentDescription = "Next Song",
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { onExecuteActionWithoutParameter("nextSong") }
+            )
         }
     }
 }
@@ -314,19 +375,28 @@ fun VacuumDetails(
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
-        // TODO: Mode
+        DropdownMenu(expanded = false, onDismissRequest = { /*TODO: Mode */ }) {
+        }
         Slider(
             value = state.batteryLevel.toFloat(),
             onValueChange = { },
             enabled = false,
+            valueRange = 0f .. 100f,
+            steps = 5,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)
         )
         Text("${(state.batteryLevel)}%")
-        // TODO: Location
+        Text(
+            "${stringResource(R.string.vacuum_location)}: ${state.location}",
+            fontSize = 15.sp,
+            modifier = Modifier // TODO: Modifier?
+            )
     }
 }
+
+//***************************************************************************//
 
 @Composable
 fun ErrorExecutingAction(
@@ -395,7 +465,8 @@ fun DeviceSlider(
     ) {
         Text(
             "${valueText}: ",
-            fontSize = 20.sp
+            fontSize = 20.sp,
+            modifier = Modifier.padding(bottom = 5.dp)
         )
         Slider(
             value = sliderPosition,

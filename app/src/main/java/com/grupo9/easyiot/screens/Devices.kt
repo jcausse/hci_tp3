@@ -89,7 +89,7 @@ fun SuccessScreen(
             } else {
                 CardGridDev(
                     devices,
-                    if(!devicesViewModel.isTablet){devicesViewModel::addRecent}else{ null },
+                    if(!(devicesViewModel.isTablet)){{ deviceId -> devicesViewModel.addRecent(deviceId) }}else{ null },
                     devicesViewModel.isTablet,
                     onDeviceDetailsClick
                 )

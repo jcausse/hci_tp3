@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
+import com.grupo9.easyiot.ui.theme.Purple120
 import com.grupo9.easyiot.ui.theme.Purple40
 import com.grupo9.easyiot.ui.theme.Purple80
 

@@ -65,7 +65,7 @@ private val spanishVersion = mapOf(
     "paused" to "pausado",
 )
 
-fun getSpanishOrDefault(word: String, spanish:Boolean): String {
+fun getSpanishOrDefault(word: String, spanish: Boolean): String {
     val toRet =
     if(!spanish) {
         word

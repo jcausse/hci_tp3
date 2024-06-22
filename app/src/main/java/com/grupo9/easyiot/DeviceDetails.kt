@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -96,10 +95,11 @@ fun LampDetails(
         DeviceSlider(
             state.brightness,
             stringResource(R.string.lamp_brightness),
+            0f,
+            100f,
             "%",
             { value -> onExecuteAction(value, "setBrightness")}
         )
-        // TODO: ChangeOnExecute Action --> color needs to be a string
         /*
         ClassicColorPicker(
             color = Color,
@@ -122,7 +122,7 @@ fun DoorDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "open"),
+            status = (state.status == "opened"),
             statusText = state.status,
             onChangeStatus = onChangeStatus
         )
@@ -145,7 +145,7 @@ fun Lock(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            "State: ${if(locked){"Locked"}else{"Unlocked"}}",
+            "${stringResource(R.string.default_status)}: ${if(locked){stringResource(R.string.door_locked)}else{stringResource(R.string.door_unlocked)}}",
             fontSize = 20.sp,
             modifier = Modifier
         )
@@ -164,7 +164,7 @@ fun Lock(
             ) {
                 Icon(
                     Icons.Filled.Lock,
-                    contentDescription = "Lock Icon",
+                    contentDescription = "Lock Icon", // TODO
                     tint = Color.White,
                     modifier = Modifier.size(24.dp)
                 )
@@ -191,6 +191,8 @@ fun BlindsDetails(
         DeviceSlider(
             state.level,
             stringResource(R.string.blinds_level),
+            0f,
+            100f,
             "%",
             { value -> onExecuteAction(value, "setLevel")}
         )
@@ -218,6 +220,8 @@ fun SpeakerDetails(
         DeviceSlider(
             state.volume,
             stringResource(R.string.speaker_volume),
+            0f,
+            100f,
             "%",
             { value -> onExecuteAction(value, "setVolume") }
         )
@@ -250,7 +254,7 @@ fun Song(
     duration: Int,
     progress: Int,
     onExecuteActionWithoutParameter: (String) -> Unit,
-    onChangeStatus: (Boolean) -> Unit
+    onChangeStatus: (Boolean) -> Unit,
 ) {
     var isPlaying by remember { mutableStateOf(false) }
     var currentSong by remember { mutableStateOf(title) }
@@ -261,7 +265,7 @@ fun Song(
             .padding(12.dp)
             .fillMaxSize()
             .background(
-                color = com.grupo9.easyiot.ui.theme.Purple120,
+                color = Purple120,
                 shape = RoundedCornerShape(8.dp)
             ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -292,7 +296,7 @@ fun Song(
         ) {
             Icon(
                 painter = painterResource(R.drawable.skip_previous),
-                contentDescription = "Previous Song",
+                contentDescription = stringResource(R.string.speaker_previous_song),
                 modifier = Modifier
                     .size(32.dp)
                     .clickable {
@@ -301,7 +305,7 @@ fun Song(
             )
             Icon(
                 painter = if (isPlaying) painterResource(R.drawable.pause) else painterResource(R.drawable.play),
-                contentDescription = if (isPlaying) "Pause" else "Play",
+                contentDescription = if (isPlaying) stringResource(R.string.speaker_pause) else stringResource(R.string.speaker_play),
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
@@ -311,14 +315,24 @@ fun Song(
             )
             Icon(
                 painter = painterResource(R.drawable.skip_next),
-                contentDescription = "Next Song",
+                contentDescription = stringResource(R.string.speaker_next_song),
                 modifier = Modifier
                     .size(32.dp)
                     .clickable { onExecuteActionWithoutParameter("nextSong") }
             )
         }
     }
+    Icon(
+        painter = painterResource(R.drawable.stop),
+        contentDescription = stringResource(R.string.speaker_stop),
+        modifier = Modifier
+            .size(40.dp)
+            .clickable {
+                onExecuteActionWithoutParameter("stop")
+            }
+    )
 }
+
 //***************************************************************************//
 //                               Refrigerator                                //
 //***************************************************************************//
@@ -331,11 +345,15 @@ fun RefrigeratorDetails(
         DeviceSlider(
             state.temperature,
             stringResource(R.string.temperature),
+            -20f,
+            -8f,
             " Cº",
             { value -> onExecuteAction(value, "setTemperature")})
         DeviceSlider(
             state.freezerTemperature,
             stringResource(R.string.freezer_temperature),
+            -20f,
+            -8f,
             " Cº",
             { value -> onExecuteAction(value, "setFreezerTemperature")}
         )
@@ -354,7 +372,7 @@ fun FaucetDetails(
     Column {
         StateSwitch(
             status = (state.status == "open"),
-            statusText = state.status,
+            statusText = state.status, // Text will be translated (if necessary) in StateSwitch
             onChangeStatus = onChangeStatus
         )
     }
@@ -371,7 +389,7 @@ fun VacuumDetails(
     Column {
         StateSwitch(
             status = (state.status == "active"),
-            statusText = state.status,
+            statusText = state.status, // Text will be translated (if necessary) in StateSwitch
             onChangeStatus = onChangeStatus
         )
         DropdownMenu(expanded = false, onDismissRequest = { /*TODO: Mode */ }) {
@@ -397,6 +415,7 @@ fun VacuumDetails(
 
 //***************************************************************************//
 
+/* TODO: Remove (?)
 @Composable
 fun ErrorExecutingAction(
     success: Boolean,
@@ -414,6 +433,7 @@ fun ErrorExecutingAction(
         )
     }
 }
+*/
 
 @Composable
 fun StateSwitch(
@@ -421,6 +441,7 @@ fun StateSwitch(
     statusText: String,
     onChangeStatus: (Boolean) -> Unit
 ) {
+    val isSpanish = stringResource(R.string.mode) == "Modo"
     var checked by remember { mutableStateOf(status) }
 
     Row (
@@ -431,7 +452,7 @@ fun StateSwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            "Status: ",
+            "${stringResource(R.string.default_status)}: ",
             fontSize = 20.sp,
             modifier = Modifier.weight(1f)
         )
@@ -443,7 +464,7 @@ fun StateSwitch(
                     onChangeStatus(checked)
                 }
             )
-            Text(statusText)
+            Text(getSpanishOrDefault(statusText, isSpanish))
         }
     }
 }
@@ -452,6 +473,8 @@ fun StateSwitch(
 fun DeviceSlider(
     value: Int,
     valueText: String,
+    minValue: Float,
+    maxValue: Float,
     symbol: String,
     onSliderChange: (Int) -> Unit
 ) {
@@ -472,7 +495,7 @@ fun DeviceSlider(
             onValueChange = {
                 sliderPosition = it
             },
-            valueRange = 0f..100f,
+            valueRange = minValue..maxValue,
             onValueChangeFinished = { onSliderChange(sliderPosition.toInt()) },
         )
         Text(text = "${(sliderPosition).toInt()}${symbol}")

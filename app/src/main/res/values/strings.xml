@@ -24,10 +24,17 @@
     <string name="vacuum_location">Location</string>
 
     <string name="door_lock">Lock</string>
+    <string name="door_locked">Locked</string>
+    <string name="door_unlocked">Unlocked</string>
 
     <string name="speaker_volume">Volume</string>
     <string name="speaker_song">Song</string>
     <string name="speaker_artist">By</string>
+    <string name="speaker_pause">Pause</string>
+    <string name="speaker_play">Play</string>
+    <string name="speaker_stop">Stop</string>
+    <string name="speaker_previous_song">Previous Song</string>
+    <string name="speaker_next_song">Next Song</string>
 
     <string name="blinds_level">Level</string>
 

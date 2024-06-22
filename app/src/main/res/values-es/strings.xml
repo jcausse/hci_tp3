@@ -25,9 +25,16 @@
     <string name="vacuum_location">Ubicación</string>
 
     <string name="door_lock">Cerradura</string>
+    <string name="door_locked">Bloqueado</string>
+    <string name="door_unlocked">Desbloqueado</string>
 
     <string name="speaker_volume">Volumen</string>
     <string name="speaker_song">Canción</string>
+    <string name="speaker_pause">Pausa</string>
+    <string name="speaker_play">Reproducir</string>
+    <string name="speaker_stop">Parar</string>
+    <string name="speaker_next_song">Siguiente</string>
+    <string name="speaker_previous_song">Anterior</string>
     <string name="speaker_artist">Por</string>
 
     <string name="blinds_level">Apertura</string>

@@ -40,7 +40,7 @@ fun DevicesScreen(
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result, devicesViewModel::addRecent, devicesViewModel.isTablet, onDeviceDetailsClick)
+            SuccessScreen(devicesState.get.result, devicesViewModel, onDeviceDetailsClick)
         }
         is DevicesState.Error -> {
             ErrorScreen()
@@ -72,8 +72,7 @@ fun ErrorScreen() {
 @Composable
 fun SuccessScreen(
     devices : ArrayList<DeviceResult>,
-    onDeviceClick: (String) -> Unit,
-    isTablet: Boolean,
+    devicesViewModel: DevicesViewModel,
     onDeviceDetailsClick: (id: String) -> Unit
 ) {
     Column(
@@ -90,8 +89,8 @@ fun SuccessScreen(
             } else {
                 CardGridDev(
                     devices,
-                    if(!isTablet){onDeviceClick}else{ null },
-                    isTablet,
+                    if(!devicesViewModel.isTablet){devicesViewModel::addRecent}else{ null },
+                    devicesViewModel.isTablet,
                     onDeviceDetailsClick
                 )
             }

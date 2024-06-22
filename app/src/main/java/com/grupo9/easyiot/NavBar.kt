@@ -35,6 +35,7 @@ import com.grupo9.easyiot.screens.DeviceDetailsViewModel
 import com.grupo9.easyiot.screens.DevicesNavHostScreen
 import com.grupo9.easyiot.screens.DashboardScreen
 import com.grupo9.easyiot.screens.DevicesViewModel
+import com.grupo9.easyiot.screens.DevicesViewModelFactory
 import com.grupo9.easyiot.screens.RoutinesLandscapeScreen
 import com.grupo9.easyiot.screens.RoutinesScreen
 import com.grupo9.easyiot.screens.RoutinesViewModel
@@ -45,18 +46,22 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     var currentDirection by rememberSaveable { mutableStateOf(NavIcons.DASHBOARD) }
     // ViewModels of all the screens
     val routinesViewModel: RoutinesViewModel = viewModel()
-    val devicesViewModel: DevicesViewModel = viewModel()
+
     val deviceDetailsViewModel: DeviceDetailsViewModel = viewModel()
 
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val refreshDevices = { devicesViewModel.getDevices() }
     val isTablet = if (isLandscape) {
         configuration.screenWidthDp > 900
     } else {
         configuration.screenWidthDp > 600
     }
+
+    val devicesViewModel: DevicesViewModel = viewModel(
+        factory = DevicesViewModelFactory(isTablet)
+    )
+
         if (isLandscape || isTablet) {
             currentDirection = if(!isTablet){NavIcons.ROUTINES}else{NavIcons.DEVICES}
             Row {
@@ -95,11 +100,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 }
                 when (currentDirection) {
                     NavIcons.DEVICES -> DevicesNavHostScreen(
-                        devicesViewModel.devicesState,
-                        devicesViewModel::addRecent,
-                        isTablet,
-                        deviceDetailsViewModel,
-                        refreshDevices
+                        devicesViewModel,
+                        deviceDetailsViewModel
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(
@@ -150,11 +152,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
             ) {
                 when (currentDirection) {
                     NavIcons.DEVICES -> DevicesNavHostScreen(
-                        devicesViewModel.devicesState,
-                        devicesViewModel::addRecent,
-                        isTablet,
+                        devicesViewModel,
                         deviceDetailsViewModel,
-                        refreshDevices
                     )
 
                     NavIcons.DASHBOARD -> DashboardScreen(

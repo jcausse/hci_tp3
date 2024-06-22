@@ -6,12 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.grupo9.easyiot.network.DeviceApi
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class DevicesViewModel : ViewModel() {
+class DevicesViewModelFactory(private val isTablet: Boolean) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(DevicesViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return DevicesViewModel(isTablet) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+
+class DevicesViewModel(val isTablet: Boolean) : ViewModel() {
     var devicesState: DevicesState by mutableStateOf(DevicesState.Loading)
         private set
 

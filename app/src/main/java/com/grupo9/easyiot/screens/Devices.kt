@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -25,16 +26,21 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen(devicesState: DevicesState, onDeviceClick: (id: String) -> Unit) {
+fun DevicesScreen(
+    devicesState: DevicesState,
+    onDeviceClick: ((String) -> Unit),
+    isTablet: Boolean,
+    onDeviceDetailsClick: (id: String) -> Unit
+) {
     when (devicesState) {
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result, onDeviceClick = onDeviceClick)
+            SuccessScreen(devicesState.get.result, onDeviceClick, isTablet, onDeviceDetailsClick)
         }
         is DevicesState.Error -> {
-            ErrorScreen(devicesState.message)
+            ErrorScreen()
         }
     }
 }
@@ -46,51 +52,79 @@ fun LoadingScreen() {
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  "loading...")
+        Text(text =  stringResource(R.string.loading_msg))
     }
 }
 @Composable
-fun ErrorScreen(message: String) {
+fun ErrorScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  message)
+        Text(text =  stringResource(R.string.devices_error_msg))
     }
 }
+
 @Composable
-fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit) {
+fun SuccessScreen(
+    devices : ArrayList<DeviceResult>,
+    onDeviceClick: (String) -> Unit,
+    isTablet: Boolean,
+    onDeviceDetailsClick: (id: String) -> Unit
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center, // Center vertically
-        horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        modifier = Modifier.fillMaxSize()
     ) {
-        Title(text = "Devices")
-        CardGridDev(devices, onDeviceClick = onDeviceClick)
+        Title(text = stringResource(R.string.bottom_navigation_devices))
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center, // Center vertically
+            horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
+        ) {
+            if (devices.isEmpty()) {
+                Text(text = stringResource(R.string.no_devices_message))
+            } else {
+                CardGridDev(
+                    devices,
+                    if(!isTablet){onDeviceClick}else{ null },
+                    isTablet,
+                    onDeviceDetailsClick
+                )
+            }
+        }
     }
 }
+
 @Composable
 fun CardGridDev(
-    devices : ArrayList<DeviceResult>,
-    onDeviceClick: (id: String) -> Unit
+    devices: List<DeviceResult>,
+    onDeviceClick: ((String) -> Unit)? = null,
+    isTablet: Boolean,
+    onDeviceDetailsClick: (id: String) -> Unit
 ) {
+    val colAmount = if(isTablet){ 4 }else{ 2 }
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Define the number of columns
+        columns = GridCells.Fixed(colAmount), // Define the number of columns
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
     ) {
-
-        itemsIndexed(devices) { index, device ->
-            DeviceCard(name = device.name, type = device.type.name,
+        itemsIndexed(
+            devices,
+            key = { _, item -> item.id }
+        ) { _, device ->
+            DeviceCard(
+                name = device.name,
+                state = device.state,
+                type = device.type.name,
                 onClick = {
-                // Handle the click event here
-                    // funcion que lleva al expanded device view
-                    // y carga el state
-                    println("Clicked on ${index}")
-                    onDeviceClick(device.id)
-            })
+                    onDeviceDetailsClick(device.id)
+                    println("Clicked on ${device.id} AKA ${device.name}")
+                    onDeviceClick?.invoke(device.id)
+                },
+                isTablet = isTablet
+            )
         }
     }
 }

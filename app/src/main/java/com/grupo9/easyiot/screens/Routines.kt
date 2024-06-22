@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.AlertDialog
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.R
@@ -57,11 +60,26 @@ fun RoutinesScreen(
     }
 }
 
-
 @Composable
-fun RoutinesScreenPreview(){
-    RoutinesScreen(routinesState = RoutinesViewModel().routinesState )
+fun RoutinesLandscapeScreen(
+    routinesState: RoutinesState,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp)
+){
+    when ( routinesState ){
+        is RoutinesState.Loading -> {
+            LoadingRoutineScreen( modifier, contentPadding)
+        }
+        is RoutinesState.Success -> {
+            SuccessRoutineLandscapeScreen(routinesState.get.result, modifier, contentPadding)
+        }
+        is RoutinesState.Error -> {
+            Text(text = routinesState.message)
+            ErrorRoutineScreen()
+        }
+    }
 }
+
 
 @Composable
 fun ErrorRoutineScreen() {
@@ -69,8 +87,42 @@ fun ErrorRoutineScreen() {
 }
 @Composable
 fun LoadingRoutineScreen(modifier: Modifier, contentPadding: PaddingValues){
-    Text(text ="loading", modifier = modifier.padding(contentPadding))
+    Text(text = stringResource(R.string.loading_msg), modifier = modifier.padding(contentPadding))
 }
+
+@Composable
+fun SuccessRoutineLandscapeScreen(routines: List<RoutineResult>, modifier: Modifier, contentPadding: PaddingValues){
+    Row (
+        modifier = modifier.padding(contentPadding)
+    ){
+        Title(text = stringResource(id = R.string.routines))
+        LazyRow(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            itemsIndexed(
+                routines,
+                key = { _, item -> item.id }
+            ) { _,routine ->
+                RoutineCard(
+                    id = routine.id,
+                    name = routine.name,
+                    time = routine.meta.weekdays,
+                    description = routine.meta.description,
+                    routine.actions
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun RoutinesScreenPreviewLandscape(){
+    RoutinesLandscapeScreen(routinesState = RoutinesViewModel().routinesState )
+}
+
 
 @Composable
 fun SuccessRoutineScreen(routines: List<RoutineResult>, modifier: Modifier, contentPadding: PaddingValues){
@@ -83,7 +135,10 @@ fun SuccessRoutineScreen(routines: List<RoutineResult>, modifier: Modifier, cont
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            items(routines) { routine ->
+            itemsIndexed(
+                routines,
+                key = { _, item -> item.id }
+            ) { _,routine ->
                 RoutineCard(
                     id = routine.id,
                     name = routine.name,
@@ -149,7 +204,7 @@ fun ScrollableList(actions: ArrayList<Actions>) {
 fun Title ( text: String ){
     Text(
         modifier = Modifier.padding(5.dp),
-        fontSize = 64.sp,
+        fontSize = 36.sp,
         color = MaterialTheme.colorScheme.primary,
         text = text,
         fontFamily = kodchasan,

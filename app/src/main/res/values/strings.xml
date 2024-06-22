@@ -6,4 +6,29 @@
     <string name="bottom_navigation_routines">Routines</string>
     <string name="bottom_navigation_dashboard">Dashboard</string>
 
+    <string name="recent_devices">Recent Devices</string>
+    <string name="no_devices_message">Devices will appear here as you add them via the website.</string>
+    <string name="no_recent_devices_message">Devices will appear here as you interact with them.</string>
+    <string name="devices_error_msg">Error loading devices</string>
+    <string name="loading_msg">Loading..</string>
+
+    <string name="temperature">Temp</string>
+    <string name="freezer_temperature">FreezeTemp</string>
+    <string name="mode">Mode</string>
+
+    <string name="lamp_color">Color</string>
+    <string name="lamp_brightness">Brightness</string>
+
+    <string name="vacuum_mode">Mode</string>
+    <string name="vacuum_battery_level">BatteryLevel</string>
+    <string name="vacuum_location">Location</string>
+
+    <string name="door_lock">Lock</string>
+
+    <string name="speaker_song">Song</string>
+    <string name="speaker_artist">By</string>
+
+    <string name="blinds_level">Level</string>
+
+    <string name="default_status">Status</string>
 </resources>

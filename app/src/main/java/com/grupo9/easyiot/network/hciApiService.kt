@@ -2,6 +2,7 @@ package com.grupo9.easyiot.network
 
 import com.grupo9.easyiot.model.device.DeviceDetails
 import com.grupo9.easyiot.model.device.Devices
+import com.grupo9.easyiot.model.routines.ExtecuteResult
 import com.grupo9.easyiot.model.routines.Routines
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -90,7 +91,7 @@ interface RoutineApiService {
     suspend fun getRoutineList() : Routines
 
     @PUT("routines/{id}/execute")
-    suspend fun executeRoutine(@Path("id") id: String) : Boolean
+    suspend fun executeRoutine(@Path("id") id: String) : ExtecuteResult
 }
 
 object RoutineApi {

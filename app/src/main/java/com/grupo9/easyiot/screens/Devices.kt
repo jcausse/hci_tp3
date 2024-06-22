@@ -28,21 +28,19 @@ val kodchasan = FontFamily(
 
 @Composable
 fun DevicesScreen(
-    devicesState: DevicesState,
-    onDeviceClick: ((String) -> Unit),
-    isTablet: Boolean,
-    onDeviceDetailsClick: (id: String) -> Unit,
-    refreshDevices: () -> Unit
+    devicesViewModel: DevicesViewModel,
+    onDeviceDetailsClick: (id: String) -> Unit
 ) {
     LaunchedEffect(Unit) {
-        refreshDevices()
+        devicesViewModel.getDevices()
     }
-    when (devicesState) {
+
+    when (val devicesState = devicesViewModel.devicesState) {
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result, onDeviceClick, isTablet, onDeviceDetailsClick)
+            SuccessScreen(devicesState.get.result, devicesViewModel::addRecent, devicesViewModel.isTablet, onDeviceDetailsClick)
         }
         is DevicesState.Error -> {
             ErrorScreen()

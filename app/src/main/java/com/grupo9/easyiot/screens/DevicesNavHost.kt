@@ -11,11 +11,8 @@ import androidx.navigation.navArgument
 
 @Composable
 fun DevicesNavHostScreen(
-    devicesState: DevicesState,
-    onDeviceClick: ((String) -> Unit),
-    isTablet: Boolean,
+    devicesViewModel: DevicesViewModel,
     deviceDetailsViewModel: DeviceDetailsViewModel,
-    refreshDevices: () -> Unit,
     navController: NavHostController = rememberNavController()
 ) {
     NavHost(
@@ -24,11 +21,8 @@ fun DevicesNavHostScreen(
     ) {
         composable("devices") {
             DevicesScreen(
-                devicesState,
-                onDeviceClick,
-                isTablet,
+                devicesViewModel,
                 onDeviceDetailsClick = { id -> navController.navigate("devices/$id") },
-                refreshDevices
             )
         }
         composable(

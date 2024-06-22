@@ -48,6 +48,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.common.ktx)
     val nav_version = "2.7.7"
     val color_picker_version = "0.7.0"
 

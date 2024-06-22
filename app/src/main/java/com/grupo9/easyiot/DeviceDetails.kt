@@ -371,7 +371,7 @@ fun FaucetDetails(
 ) {
     Column {
         StateSwitch(
-            status = (state.status == "open"),
+            status = (state.status == "opened"),
             statusText = state.status, // Text will be translated (if necessary) in StateSwitch
             onChangeStatus = onChangeStatus
         )

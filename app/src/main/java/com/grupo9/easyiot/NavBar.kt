@@ -44,9 +44,9 @@ import com.grupo9.easyiot.screens.RoutinesViewModel
 @Composable
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     var currentDirection by rememberSaveable { mutableStateOf(NavIcons.DASHBOARD) }
+
     // ViewModels of all the screens
     val routinesViewModel: RoutinesViewModel = viewModel()
-
     val deviceDetailsViewModel: DeviceDetailsViewModel = viewModel()
 
     val configuration = LocalConfiguration.current

@@ -238,16 +238,6 @@ fun SpeakerDetails(
     }
 }
 
-fun parseTimeString(timeString: String): Int {
-    val parts = timeString.split(":")
-    if (parts.size != 2) {
-        throw NumberFormatException("Invalid time format")
-    }
-    val minutes = parts[0].toIntOrNull() ?: 0
-    val seconds = parts[1].toIntOrNull() ?: 0
-    return minutes * 60 + seconds
-}
-
 @Composable
 fun Song(
     title: String,
@@ -331,6 +321,16 @@ fun Song(
                 onExecuteActionWithoutParameter("stop")
             }
     )
+}
+
+fun parseTimeString(timeString: String): Int {
+    val parts = timeString.split(":")
+    if (parts.size != 2) {
+        throw NumberFormatException("Invalid time format")
+    }
+    val minutes = parts[0].toIntOrNull() ?: 0
+    val seconds = parts[1].toIntOrNull() ?: 0
+    return minutes * 60 + seconds
 }
 
 //***************************************************************************//

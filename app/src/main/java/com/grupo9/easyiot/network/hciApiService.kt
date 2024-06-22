@@ -1,5 +1,6 @@
 package com.grupo9.easyiot.network
 
+import com.grupo9.easyiot.model.device.DeviceInfo
 import com.grupo9.easyiot.model.device.Devices
 import com.grupo9.easyiot.model.routines.ExtecuteResult
 import com.grupo9.easyiot.model.routines.Routines
@@ -32,6 +33,9 @@ private val retrofit = Retrofit.Builder()
 interface DeviceApiService {
     @GET("devices")
     suspend fun getDeviceList() : Devices
+
+    @GET("devices/{id}")
+    suspend fun getDevice(@Path("id") id: String) : DeviceInfo
 }
 
 object DeviceApi {

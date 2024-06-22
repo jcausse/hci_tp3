@@ -49,7 +49,8 @@ fun DeviceCard(name: String, type: String, onClick: () -> Unit ) {
             .width(160.dp)
             .height(160.dp)
             .clickable(onClick = onClick),
-        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = androidx.compose.ui.graphics.Color.White,
             contentColor = MaterialTheme.colorScheme.primary),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
     ) {

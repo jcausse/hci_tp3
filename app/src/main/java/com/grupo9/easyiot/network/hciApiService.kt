@@ -1,6 +1,7 @@
 package com.grupo9.easyiot.network
 
 import com.grupo9.easyiot.model.device.DeviceDetails
+import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.Devices
 import com.grupo9.easyiot.model.routines.Routines
 import okhttp3.MediaType.Companion.toMediaType
@@ -9,13 +10,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import kotlinx.serialization.json.Json
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
 // private const val BASE_URL = "http://10.0.2.2:8080/api/"
-private const val BASE_URL = "http://192.168.1.6:8080/api/" // For Aisa
+private const val BASE_URL = "http://192.168.1.6:8080/api/"
 
 private val httpLoggingInterceptor = HttpLoggingInterceptor()
     .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -43,6 +44,24 @@ object DeviceApi {
 interface DeviceDetailsApiService {
     @GET("devices/{id}")
     suspend fun getDevice(@Path("id") id: String) : DeviceDetails
+
+    @PUT("devices/{id}")
+    suspend fun changeBrightness(
+        @Path("id") id: String,
+        @Body device: DeviceResult
+    ): Boolean
+
+    @PUT("devices/{id}")
+    suspend fun changeLevel(
+        @Path("id") id: String,
+        @Body device: DeviceResult
+    ): Boolean
+
+    @PUT("devices/{id}")
+    suspend fun changeVolume(
+        @Path("id") id: String,
+        @Body device: DeviceResult
+    ): Boolean
 }
 
 object DeviceDetailsApi {

@@ -7,17 +7,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.grupo9.easyiot.receivers.SkipNotificationReceiver
 import com.grupo9.easyiot.ui.theme.EasyIoTTheme
 
@@ -34,28 +29,7 @@ class MainActivity : ComponentActivity() {
                 ){
                     innerPadding -> AppNavigationBar(Modifier.padding(innerPadding))
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        val permissionState =
-                            rememberPermissionState(permission = android.Manifest.permission.POST_NOTIFICATIONS)
-                        if (!permissionState.status.isGranted) {
-                            Column {
-                                val textToShow = if (permissionState.status.shouldShowRationale) {
-                                    // If the user has denied the permission but the rationale can be shown,
-                                    // then gently explain why the app requires this permission
-                                    "Notifications are important for this app. Please grant the permission."
-                                } else {
-                                    // If it's the first time the user lands on this feature, or the user
-                                    // doesn't want to be asked again for this permission, explain that the
-                                    // permission is required
-                                    "Notification permission required for this feature to be available. " +
-                                            "Please grant the permission"
-                                }
-                                Text(textToShow)
-
-                                LaunchedEffect(true) {
-                                    permissionState.launchPermissionRequest()
-                                }
-                            }
-                        }
+                        rememberPermissionState(permission = android.Manifest.permission.POST_NOTIFICATIONS)
                     }
 
                     val deviceId = intent?.getStringExtra(EasyIotIntent.DEVICE_ID)
@@ -92,7 +66,6 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        // TODO: valor fijo, cambiar por un valor de dispositivo válido.
-        private const val DEVICE_ID = "0511065e1e287073"
+        private const val DEVICE_ID = "3caf1f787ab20a75"
     }
 }

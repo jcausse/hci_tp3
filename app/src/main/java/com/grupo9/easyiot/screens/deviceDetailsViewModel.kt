@@ -1,5 +1,6 @@
 package com.grupo9.easyiot.screens
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,6 +11,12 @@ import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.network.DeviceDetailsApi
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonPrimitive
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
 
 class DeviceDetailsViewModel() : ViewModel() {
     var deviceDetailsState: DeviceDetailsState by mutableStateOf(DeviceDetailsState.Loading)
@@ -45,14 +52,30 @@ class DeviceDetailsViewModel() : ViewModel() {
         }
     }
 
-    fun executeAction(id: String, action: String, value: Int) {
+    fun listToJsonArray(data: List<Any>): List<JsonElement> {
+        val jsonElements = mutableListOf<JsonElement>()
+        for (item in data) {
+            when (item) {
+                is String -> jsonElements.add(JsonPrimitive(item))
+                is Number -> jsonElements.add(JsonPrimitive(item))
+                is Boolean -> jsonElements.add(JsonPrimitive(item))
+                else -> throw IllegalArgumentException("Unsupported type: ${item.javaClass}")
+            }
+        }
+        return jsonElements
+    }
+
+    fun executeAction(id: String, action: String, value: Any) {
         viewModelScope.launch {
             executeActionResult = try {
-                val result = DeviceDetailsApi.retorfitService.executeAction(id, action, value)
+                val result = DeviceDetailsApi.retorfitService.executeAction(id, action,listToJsonArray(listOf(value)))
                 result.result
-            } catch (e: Exception) { false }
+            } catch (e: Exception) {
+                Log.e("DeviceViewModel", "API call failed: ${e.message}: Value: ${listToJsonArray(listOf(value))}")
+                false }
         }
     }
+
     fun executeActionWithoutParameters(id: String, action: String) {
         viewModelScope.launch {
             executeActionResult = try {

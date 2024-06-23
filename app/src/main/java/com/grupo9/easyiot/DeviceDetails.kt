@@ -42,7 +42,7 @@ import com.grupo9.easyiot.ui.theme.Purple80
 @Composable
 fun DeviceDetails(
     device: DeviceResult,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
     onChangeStatus: (Boolean) -> Unit,
     onExecuteActionWithoutParameter: (String) -> Unit
 ) {
@@ -83,7 +83,7 @@ fun DeviceDetails(
 @Composable
 fun LampDetails(
     state: State.LampState,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
     onChangeStatus: (Boolean) -> Unit,
 ) {
     var lightColor by remember { mutableStateOf(state.color) }
@@ -180,7 +180,7 @@ fun Lock(
 @Composable
 fun BlindsDetails(
     state: State.BlindsState,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
     onChangeStatus: (Boolean) -> Unit
 ) {
     Column {
@@ -206,7 +206,7 @@ fun BlindsDetails(
 @Composable
 fun SpeakerDetails(
     state: State.SpeakerState,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
     onExecuteActionWithoutParameter: (String) -> Unit,
     onChangeStatus: (Boolean) -> Unit
 ) {
@@ -340,7 +340,7 @@ fun parseTimeString(timeString: String): Int {
 @Composable
 fun RefrigeratorDetails(
     state: State.RefrigeratorState,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
 ) {
     Column {
         DeviceSlider(

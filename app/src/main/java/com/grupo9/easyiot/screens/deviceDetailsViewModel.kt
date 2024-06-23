@@ -11,12 +11,8 @@ import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.network.DeviceDetailsApi
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
 
 class DeviceDetailsViewModel() : ViewModel() {
     var deviceDetailsState: DeviceDetailsState by mutableStateOf(DeviceDetailsState.Loading)
@@ -54,7 +50,15 @@ class DeviceDetailsViewModel() : ViewModel() {
 
     fun listToJsonArray(data: List<Any>): List<JsonElement> {
         val jsonElements = mutableListOf<JsonElement>()
-        for (item in data) {
+
+        var auxData = data
+        if (auxData.isNotEmpty() && auxData[0] is List<*>) {
+
+            @Suppress("UNCHECKED_CAST")
+            auxData = auxData[0] as List<Any>
+        }
+
+        for (item in auxData) {
             when (item) {
                 is String -> jsonElements.add(JsonPrimitive(item))
                 is Number -> jsonElements.add(JsonPrimitive(item))

@@ -9,8 +9,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -25,68 +27,85 @@ val kodchasan = FontFamily(
 )
 
 @Composable
-fun DevicesScreen( devicesState: DevicesState, onDeviceClick: ((String) -> Unit), isTablet: Boolean){
-    when ( devicesState ){
+fun DevicesScreen(
+    devicesViewModel: DevicesViewModel,
+    onDeviceDetailsClick: (id: String) -> Unit
+) {
+    LaunchedEffect(Unit) {
+        devicesViewModel.getDevices()
+    }
+
+    when (val devicesState = devicesViewModel.devicesState) {
         is DevicesState.Loading -> {
             LoadingScreen()
         }
         is DevicesState.Success -> {
-            SuccessScreen(devicesState.get.result, onDeviceClick, isTablet)
+            SuccessScreen(devicesState.get.result, devicesViewModel, onDeviceDetailsClick)
         }
         is DevicesState.Error -> {
-            ErrorScreen(devicesState.message)
+            ErrorScreen()
         }
     }
 }
 
 @Composable
-fun LoadingScreen(){
+fun LoadingScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  "loading...")
+        Text(text =  stringResource(R.string.loading_msg))
     }
 }
 @Composable
-fun ErrorScreen(message: String){
+fun ErrorScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center, // Center vertically
         horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
     ) {
-        Text(text =  message)
+        Text(text =  stringResource(R.string.devices_error_msg))
     }
 }
+
 @Composable
-fun SuccessScreen(devices : ArrayList<DeviceResult>, onDeviceClick: (String) -> Unit, isTablet: Boolean){
+fun SuccessScreen(
+    devices : ArrayList<DeviceResult>,
+    devicesViewModel: DevicesViewModel,
+    onDeviceDetailsClick: (id: String) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize()
-    ){
-        Title(text = "Devices")
+    ) {
+        Title(text = stringResource(R.string.bottom_navigation_devices))
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center, // Center vertically
             horizontalAlignment = Alignment.CenterHorizontally // Center horizontally
         ) {
-            if (devices.isEmpty()){
-                Text(text = "Devices will appear here as you add them via the website.")
-            }
-            else{
-                CardGridDev(devices, if(!isTablet){onDeviceClick}else{null},isTablet)
+            if (devices.isEmpty()) {
+                Text(text = stringResource(R.string.no_devices_message))
+            } else {
+                CardGridDev(
+                    devices,
+                    if(!(devicesViewModel.isTablet)){{ deviceId -> devicesViewModel.addRecent(deviceId) }}else{ null },
+                    devicesViewModel.isTablet,
+                    onDeviceDetailsClick
+                )
             }
         }
     }
 }
-@Composable
-fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? = null, isTablet: Boolean) {
-    val colAmount = if(isTablet){
-        4
-    } else {
-        2
-    }
 
+@Composable
+fun CardGridDev(
+    devices: List<DeviceResult>,
+    onDeviceClick: ((String) -> Unit)? = null,
+    isTablet: Boolean,
+    onDeviceDetailsClick: (id: String) -> Unit
+) {
+    val colAmount = if(isTablet){ 4 }else{ 2 }
     LazyVerticalGrid(
         columns = GridCells.Fixed(colAmount), // Define the number of columns
         modifier = Modifier
@@ -96,16 +115,17 @@ fun CardGridDev(devices: List<DeviceResult>, onDeviceClick: ((String) -> Unit)? 
         itemsIndexed(
             devices,
             key = { _, item -> item.id }
-        )
-        { _, device ->
-            DeviceCard(name = device.name, state = device.state, type = device.type.name,
+        ) { _, device ->
+            DeviceCard(
+                name = device.name,
+                state = device.state,
+                type = device.type.name,
                 onClick = {
-                    // Handle the click event here
-                    // funcion que lleva al expanded device view
-                    // y carga el state
+                    onDeviceDetailsClick(device.id)
                     println("Clicked on ${device.id} AKA ${device.name}")
                     onDeviceClick?.invoke(device.id)
-                }, isTablet = isTablet
+                },
+                isTablet = isTablet
             )
         }
     }

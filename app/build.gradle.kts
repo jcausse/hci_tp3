@@ -48,6 +48,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.navigation.common.ktx)
+    val nav_version = "2.7.7"
+    val color_picker_version = "0.7.0"
+
     implementation(libs.retrofit)
     implementation(libs.converter.kotlin.serialization)
     implementation(libs.androidx.lifecycle.viewmodel.compose.android)
@@ -65,6 +69,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.adaptive.android)
     implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("com.github.skydoves:colorpicker-compose:1.0.0")
+    implementation("androidx.compose.material3:material3:1.3.0-beta03")
     implementation(libs.gson)
     implementation(libs.accompanist.permissions)
 

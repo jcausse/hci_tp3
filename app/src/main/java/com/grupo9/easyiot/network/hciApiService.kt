@@ -1,17 +1,20 @@
 package com.grupo9.easyiot.network
 
+import com.grupo9.easyiot.model.device.DeviceDetails
 import com.grupo9.easyiot.model.device.DeviceInfo
 import com.grupo9.easyiot.model.device.Devices
+import com.grupo9.easyiot.model.device.ExecuteActionResult
 import com.grupo9.easyiot.model.routines.ExtecuteResult
 import com.grupo9.easyiot.model.routines.Routines
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.http.GET
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import retrofit2.http.POST
+import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
@@ -43,6 +46,40 @@ object DeviceApi {
         retrofit.create(DeviceApiService::class.java)
     }
 }
+
+interface DeviceDetailsApiService {
+    @GET("devices/{id}")
+    suspend fun getDevice(@Path("id") id: String) : DeviceDetails
+
+    @PUT("devices/{id}/{actionName}")
+    suspend fun executeAction(
+        @Path("id") id: String,
+        @Path("actionName") action: String,
+        @Body value: List<@JvmSuppressWildcards JsonElement>
+    ): ExecuteActionResult
+
+
+
+    @PUT("devices/{id}/{actionName}")
+    suspend fun executeActionWithoutParameters(
+        @Path("id") id: String,
+        @Path("actionName") action: String
+    ): ExecuteActionResult
+
+    @PUT("devices/{id}/{actionName}")
+    suspend fun changeStatus(
+        @Path("id") id: String,
+        @Path("actionName") action: String
+    ): Boolean
+
+}
+
+object DeviceDetailsApi {
+    val retorfitService : DeviceDetailsApiService by lazy {
+        retrofit.create(DeviceDetailsApiService::class.java)
+    }
+}
+
 interface RoutineApiService {
     var id : Int
     @GET("routines")

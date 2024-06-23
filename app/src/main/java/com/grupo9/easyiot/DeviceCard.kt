@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.grupo9.easyiot.model.device.State
+import java.util.Locale
 
 val kodchasan = FontFamily(
     Font(R.font.kodchasan_regular, FontWeight.Normal),
@@ -44,6 +45,37 @@ fun getDrawableForDeviceType(deviceType: String): Int {
     return deviceTypeToDrawable[deviceType] ?: R.drawable.file_question
 }
 
+private val spanishVersion = mapOf(
+    "default" to "predeterminado",
+    "vacation" to "vacaciones",
+    "party" to "fiesta",
+    "vacuum" to "aspiradora",
+    "mop" to "fregar",
+    "docked" to "atracada",
+    "charging" to "cargando",
+    "stopped" to "detenido",
+    "cleaning" to "limpieza",
+    "locked" to "bloqueada",
+    "unlocked" to "desbloqueada",
+    "opened" to "abierto",
+    "closed" to "cerrado",
+    "on" to "encendida",
+    "off" to "apagada",
+    "playing" to "reproduciendo",
+    "paused" to "pausado",
+)
+
+fun getSpanishOrDefault(word: String, spanish: Boolean): String {
+    val toRet =
+    if(!spanish) {
+        word
+    } else {
+        spanishVersion[word] ?: word
+    }
+    return toRet.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+}
+
+
 fun truncateText(text: String, maxLength: Int): String {
     return if (text.length > maxLength) {
         text.substring(0, maxLength-3) + "..."
@@ -55,50 +87,51 @@ fun truncateText(text: String, maxLength: Int): String {
 @Composable
 fun getDevStatusToStr(state: State, isTablet: Boolean): String {
     val baseString = StringBuilder()
+    val isSpanish = stringResource(R.string.mode) == "Modo"
 
     when (state) {
         is State.RefrigeratorState -> {
             baseString.append(stringResource(R.string.temperature)).append(": ${state.temperature} C\n")
             .append(stringResource(R.string.freezer_temperature)).append(": ${state.freezerTemperature} C\n")
             if (isTablet) {
-                baseString.append(stringResource(R.string.mode)).append(": ${state.mode}")
+                baseString.append(stringResource(R.string.mode)).append(": ${getSpanishOrDefault(state.mode,isSpanish)}")
             }
         }
         is State.LampState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}\n")
             .append(stringResource(R.string.lamp_color)).append(": ${state.color}\n")
             if (isTablet) {
                 baseString.append(stringResource(R.string.lamp_brightness)).append(": ${state.brightness}")
             }
         }
         is State.VacuumState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}\n")
             if (isTablet) {
-                baseString.append(stringResource(R.string.mode)).append(": ${state.mode}\n")
+                baseString.append(stringResource(R.string.mode)).append(": ${getSpanishOrDefault(state.mode,isSpanish)}\n")
                 .append(stringResource(R.string.vacuum_battery_level)).append(": ${state.batteryLevel}%\n")
                 .append(stringResource(R.string.vacuum_location)).append(": ${truncateText(state.location.name, 10)}")
             }
         }
         is State.FaucetState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}")
         }
         is State.DoorState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
-            .append(stringResource(R.string.door_lock)).append(": ${state.lock}")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}\n")
+            .append(stringResource(R.string.door_lock)).append(": ${getSpanishOrDefault(state.lock,isSpanish)}")
         }
         is State.SpeakerState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}\n")
             if (isTablet) {
                 baseString.append(stringResource(R.string.speaker_song)).append(": ${truncateText(state.song.title, 30)}\n")
                 .append(stringResource(R.string.speaker_artist)).append(": ${truncateText(state.song.artist, 16)}")
             }
         }
         is State.BlindsState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}\n")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}\n")
             .append(stringResource(R.string.blinds_level)).append(": ${state.currentLevel}%")
         }
         is State.DefaultState -> {
-            baseString.append(stringResource(R.string.default_status)).append(": ${state.status}")
+            baseString.append(stringResource(R.string.default_status)).append(": ${getSpanishOrDefault(state.status,isSpanish)}")
         }
     }
 
@@ -133,7 +166,8 @@ fun DeviceCard(name: String, type: String, state: State, onClick: () -> Unit, is
             .width(dims.width.dp)
             .height(dims.height.dp)
             .clickable(onClick = onClick),
-        colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = androidx.compose.ui.graphics.Color.White,
+        colors = androidx.compose.material3.CardDefaults.cardColors(
+            containerColor = androidx.compose.ui.graphics.Color.White,
             contentColor = MaterialTheme.colorScheme.primary),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(4.dp)
     ) {

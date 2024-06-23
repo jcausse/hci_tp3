@@ -82,17 +82,12 @@ fun RoutinesLandscapeScreen(
 
 
 @Composable
-fun RoutinesScreenPreview(){
-    RoutinesScreen(routinesState = RoutinesViewModel().routinesState )
-}
-
-@Composable
 fun ErrorRoutineScreen() {
     Text(text = "Error")
 }
 @Composable
 fun LoadingRoutineScreen(modifier: Modifier, contentPadding: PaddingValues){
-    Text(text ="loading", modifier = modifier.padding(contentPadding))
+    Text(text = stringResource(R.string.loading_msg), modifier = modifier.padding(contentPadding))
 }
 
 @Composable

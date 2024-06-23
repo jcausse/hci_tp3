@@ -299,7 +299,7 @@ fun SpeakerDetails(
             state.volume,
             stringResource(R.string.speaker_volume),
             0f,
-            100f,
+            10f,
             "%",
             { value -> onExecuteAction(value, "setVolume") }
         )

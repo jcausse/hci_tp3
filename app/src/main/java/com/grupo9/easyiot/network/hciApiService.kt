@@ -1,6 +1,7 @@
 package com.grupo9.easyiot.network
 
 import com.grupo9.easyiot.model.device.DeviceDetails
+import com.grupo9.easyiot.model.device.DeviceInfo
 import com.grupo9.easyiot.model.device.Devices
 import com.grupo9.easyiot.model.device.ExecuteActionResult
 import com.grupo9.easyiot.model.routines.ExtecuteResult
@@ -17,10 +18,8 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-//Use this BASE_URL to connect to emulated phone in android studio
- private const val BASE_URL = "http://10.0.2.2:8080/api/"
-//A base url that worked for a real device
-//private const val BASE_URL = "http://192.168.1.6:8080/api/"
+const val BASE_URL = "http://10.0.2.2:8080/api/"
+const val NOTIFICATION_POLL_TIME_MS: Long = 1000L * 60L // 1 minute
 
 private val httpLoggingInterceptor = HttpLoggingInterceptor()
     .setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -37,6 +36,9 @@ private val retrofit = Retrofit.Builder()
 interface DeviceApiService {
     @GET("devices")
     suspend fun getDeviceList() : Devices
+
+    @GET("devices/{id}")
+    suspend fun getDevice(@Path("id") id: String) : DeviceInfo
 }
 
 object DeviceApi {

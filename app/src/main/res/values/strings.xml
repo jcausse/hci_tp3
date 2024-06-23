@@ -15,11 +15,16 @@
     <string name="temperature">Temp</string>
     <string name="freezer_temperature">FreezeTemp</string>
     <string name="mode">Mode</string>
+    <string name="default_mode">Default</string>
+    <string name="vacation_mode">Vacation</string>
+    <string name="party_mode">Party</string>
 
     <string name="lamp_color">Color</string>
     <string name="lamp_brightness">Brightness</string>
 
     <string name="vacuum_mode">Mode</string>
+    <string name="vacuum_vacuum">Aspiradora</string>
+    <string name="vacuum_mop">Fregona</string>
     <string name="vacuum_battery_level">BatteryLevel</string>
     <string name="vacuum_location">Location</string>
 

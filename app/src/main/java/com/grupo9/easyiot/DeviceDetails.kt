@@ -3,6 +3,7 @@ package com.grupo9.easyiot
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,13 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
@@ -29,10 +36,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.model.device.State
 import com.grupo9.easyiot.ui.theme.Purple120
@@ -71,7 +80,7 @@ fun DeviceDetails(
             FaucetDetails(state, onChangeStatus)
         }
         is State.VacuumState -> {
-            VacuumDetails(state, onChangeStatus)
+            VacuumDetails(state, onChangeStatus, onExecuteAction)
         }
         else -> {}
     }
@@ -86,7 +95,8 @@ fun LampDetails(
     onExecuteAction: (Int, String) -> Unit,
     onChangeStatus: (Boolean) -> Unit,
 ) {
-    var lightColor by remember { mutableStateOf(state.color) }
+    var color by remember { mutableStateOf(state.color) }
+
     Column {
         StateSwitch(
             status = (state.status == "on"),
@@ -101,15 +111,81 @@ fun LampDetails(
             "%",
             { value -> onExecuteAction(value, "setBrightness")}
         )
-        /*
-        ClassicColorPicker(
-            color = Color,
-            onColorChanged = { color: HsvColor ->
-                lightColor = color.toString()
-                onExecuteAction(lightColor.toInt(), "setColor")
-            }
+        ColorsDropDown(
+            selectedValue = color,
+            options = listOf(
+                Color.White,
+                Color.Yellow,
+                Color.Green,
+                Color.Cyan,
+                Color.Blue
+            ),
+            { newColor -> color = hexToColor[newColor] ?: "#FFFFFFFF"},
+            { onExecuteAction(1, "setColor") } // TODO: Change to the correct call
         )
-        */
+    }
+}
+
+private val colorToHex = mapOf(
+    "#FFFFFFFF" to Color.White,
+    "#FFFFFF00" to Color.Yellow,
+    "#FF00FF00" to Color.Green,
+    "#FF00FFFF" to Color.Cyan,
+    "#FF0000FF" to Color.Blue
+)
+
+private val hexToColor = mapOf(
+    Color.White to "#FFFFFFFF",
+    Color.Yellow to "#FFFFFF00",
+    Color.Green to "#FF00FF00",
+    Color.Cyan to "#FF00FFFF",
+    Color.Blue to "#FF0000FF"
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ColorsDropDown(
+    selectedValue: String,
+    options: List<Color>,
+    onValueChange: (Color) -> Unit,
+    onExecuteAction: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Row(Modifier.fillMaxWidth().padding(10.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.background(color = colorToHex[selectedValue] ?: Color.White).size(50.dp).padding(end = 5.dp))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                readOnly = true,
+                value = selectedValue,
+                onValueChange = {},
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor()
+            )
+            ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                options.forEach { option: Color ->
+                    DropdownMenuItem(
+                        text = {},
+                        onClick = {
+                            expanded = false
+                            onValueChange(option)
+                            onExecuteAction(hexToColor[option] ?: "#FFFFFFFF")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(40.dp)
+                            .background(option)
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -342,6 +418,8 @@ fun RefrigeratorDetails(
     state: State.RefrigeratorState,
     onExecuteAction: (Int, String) -> Unit,
 ) {
+    val isSpanish = stringResource(R.string.mode) == "Modo"
+
     Column {
         DeviceSlider(
             state.temperature,
@@ -358,7 +436,60 @@ fun RefrigeratorDetails(
             " Cº",
             { value -> onExecuteAction(value, "setFreezerTemperature")}
         )
-        //    @SerialName("mode") val mode: String
+        var selectedOption by remember { mutableStateOf(getSpanishOrDefault(state.mode, isSpanish)) }
+
+        DropDown(
+            selectedOption,
+            listOf(
+                stringResource(R.string.default_mode),
+                stringResource(R.string.vacation_mode),
+                stringResource(R.string.party_mode),
+                ),
+            { newValue -> selectedOption = newValue },
+            { onExecuteAction(1, "setMode") }
+        )
+    }
+}
+
+// https://medium.com/@german220291/building-a-custom-exposed-dropdown-menu-with-jetpack-compose-d65232535bf2
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDown(
+    selectedValue: String,
+    options: List<String>,
+    onValueChange: (String) -> Unit,
+    onExecuteAction: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        OutlinedTextField(
+            readOnly = true,
+            value = selectedValue,
+            onValueChange = {},
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor()
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            options.forEach { option: String ->
+                DropdownMenuItem(
+                    text = { Text(text = option) },
+                    onClick = {
+                        expanded = false
+                        onValueChange(option)
+                        onExecuteAction(option)
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -385,16 +516,29 @@ fun FaucetDetails(
 @Composable
 fun VacuumDetails(
     state: State.VacuumState,
-    onChangeStatus: (Boolean) -> Unit
+    onChangeStatus: (Boolean) -> Unit,
+    onExecuteAction: (Int, String) -> Unit
 ) {
+    val isSpanish = stringResource(R.string.mode) == "Modo"
+
     Column {
         StateSwitch(
             status = (state.status == "active"),
             statusText = state.status, // Text will be translated (if necessary) in StateSwitch
             onChangeStatus = onChangeStatus
         )
-        DropdownMenu(expanded = false, onDismissRequest = { /*TODO: Mode */ }) {
-        }
+        var selectedOption by remember { mutableStateOf(getSpanishOrDefault(state.mode, isSpanish)) }
+
+        DropDown(
+            selectedOption,
+            listOf(
+                stringResource(R.string.vacuum_vacuum),
+                stringResource(R.string.vacuum_mop),
+            ),
+            { newValue -> selectedOption = newValue },
+            { onExecuteAction(1, "setMode") }
+        )
+
         Slider(
             value = state.batteryLevel.toFloat(),
             onValueChange = { },
@@ -403,38 +547,16 @@ fun VacuumDetails(
             steps = 5,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(8.dp)
+                .height(12.dp)
         )
         Text("${(state.batteryLevel)}%")
         Text(
             "${stringResource(R.string.vacuum_location)}: ${state.location}",
-            fontSize = 15.sp,
-            modifier = Modifier // TODO: Modifier?
-            )
+            fontSize = 15.sp)
     }
 }
 
 //***************************************************************************//
-
-/* TODO: Remove (?)
-@Composable
-fun ErrorExecutingAction(
-    success: Boolean,
-    onDismiss: () -> Unit
-) {
-    if (!success) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            text = { Text("Error executing action") },
-            confirmButton = {
-                Button(onClick = onDismiss) {
-                    Text("OK")
-                }
-            }
-        )
-    }
-}
-*/
 
 @Composable
 fun StateSwitch(

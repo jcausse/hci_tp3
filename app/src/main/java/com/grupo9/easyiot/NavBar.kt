@@ -106,7 +106,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
 
                     NavIcons.DASHBOARD -> DashboardScreen(
                         devicesViewModel.recentDevices,
-                        devicesViewModel.devicesState
+                        devicesViewModel
                     )
 
                     NavIcons.ROUTINES -> RoutinesLandscapeScreen(
@@ -158,7 +158,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
 
                     NavIcons.DASHBOARD -> DashboardScreen(
                         devicesViewModel.recentDevices,
-                        devicesViewModel.devicesState
+                        devicesViewModel
                     )
 
                     NavIcons.ROUTINES -> RoutinesScreen(routinesViewModel.routinesState)

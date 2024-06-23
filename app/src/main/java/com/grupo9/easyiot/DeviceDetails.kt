@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.decapitalize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
@@ -121,7 +122,7 @@ fun LampDetails(
                 Color.Blue
             ),
             { newColor -> color = hexToColor[newColor] ?: "#FFFFFFFF"},
-            { onExecuteAction(1, "setColor") } // TODO: Change to the correct call
+            { onExecuteAction(color, "setColor") } // TODO: Change to the correct call
         )
     }
 }
@@ -410,6 +411,14 @@ fun parseTimeString(timeString: String): Int {
     return minutes * 60 + seconds
 }
 
+private val modemap = mapOf(
+    "Vaciones" to "vacations",
+    "Predeterminado" to "default",
+    "Fiesta" to "party",
+    "Vacations" to "vacations",
+    "Default" to "default",
+    "Party" to "party",
+)
 //***************************************************************************//
 //                               Refrigerator                                //
 //***************************************************************************//
@@ -446,7 +455,7 @@ fun RefrigeratorDetails(
                 stringResource(R.string.party_mode),
                 ),
             { newValue -> selectedOption = newValue },
-            { onExecuteAction(1, "setMode") }
+            { onExecuteAction(modemap[selectedOption] ?: "default", "setMode") }
         )
     }
 }

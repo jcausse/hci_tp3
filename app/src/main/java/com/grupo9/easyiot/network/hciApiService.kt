@@ -18,7 +18,7 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-const val BASE_URL = "http://192.168.100.87:8080/api/"
+const val BASE_URL = "http://10.0.2.2:8080/api/"
 const val NOTIFICATION_POLL_TIME_MS: Long = 1000L * 60L // 1 minute
 
 private val httpLoggingInterceptor = HttpLoggingInterceptor()

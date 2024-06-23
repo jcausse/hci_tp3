@@ -36,7 +36,7 @@ fun DeviceDetailsScreen(deviceDetailsViewModel: DeviceDetailsViewModel) {
 @Composable
 fun DeviceDetailsSuccessScreen(
     device : DeviceResult,
-    onExecuteAction: (DeviceResult, Int, String) -> Unit,
+    onExecuteAction: (DeviceResult, Any, String) -> Unit,
     onExecuteActionWithoutParameter: (DeviceResult, String) -> Unit,
     onChangeStatus: (DeviceResult, Boolean) -> Unit,
 ) {

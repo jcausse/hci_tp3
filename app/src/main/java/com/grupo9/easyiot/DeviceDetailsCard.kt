@@ -22,7 +22,7 @@ import com.grupo9.easyiot.model.device.DeviceResult
 @Composable
 fun DeviceDetailsCard(
     device : DeviceResult,
-    onExecuteAction: (Int, String) -> Unit,
+    onExecuteAction: (Any, String) -> Unit,
     onExecuteActionWithoutParameter: (String) -> Unit,
     onChangeStatus: (Boolean) -> Unit,
 ) {

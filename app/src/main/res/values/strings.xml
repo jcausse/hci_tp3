@@ -26,8 +26,19 @@
     <string name="blinds_level">Level</string>
 
     <string name="default_status">Status</string>
-    <string name="notification_title">EasyIot</string>
+    <string name="notification_default_title">EasyIot</string>
 
     <string name="notification_channel_title">Device Updates</string>
     <string name="notification_channel_description">Let EasyIot inform you when the status of your devices change</string>
+    <string name="notification_default_message">New Notification</string>
+    <string name="notification_status_changed_prefix">Status changed to</string>
+    <string name="notification_lock_changed_prefix">Lock changed to</string>
+    <string name="notification_color_changed_prefix">Color changed to</string>
+    <string name="notification_mode_changed_prefix">Mode changed to</string>
+    <string name="notification_temperature_changed_prefix">Temperature changed to</string>
+    <string name="notification_freezer_temperature_changed_prefix">Freezer temperature changed to</string>
+    <string name="notification_level_changed_prefix">Level changed to</string>
+    <string name="notification_volume_changed_prefix">Volume changed to</string>
+    <string name="notification_genre_changed_prefix">Music genre changed to</string>
+    <string name="notification_intensity_changed_prefix">Intensity changed to</string>
 </resources>

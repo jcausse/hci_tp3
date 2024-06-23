@@ -26,7 +26,18 @@
     <string name="blinds_level">Apertura</string>
 
     <string name="default_status">Estado</string>
-    <string name="notification_title">EasyIot</string>
+    <string name="notification_default_title">EasyIot</string>
     <string name="notification_channel_title">Actualizaciones de Dispositivos</string>
     <string name="notification_channel_description">Permita que EasyIot le informe acerca de cambios en el estado de sus dispositivos</string>
+    <string name="notification_default_message">Nueva Notificación</string>
+    <string name="notification_status_changed_prefix">El estado cambió a</string>
+    <string name="notification_lock_changed_prefix">La cerradura cambió a</string>
+    <string name="notification_color_changed_prefix">El color cambió a</string>
+    <string name="notification_mode_changed_prefix">El modo cambió a</string>
+    <string name="notification_temperature_changed_prefix">La temperatura cambió a</string>
+    <string name="notification_freezer_temperature_changed_prefix">La temperatura del congelador cambió a</string>
+    <string name="notification_level_changed_prefix">El nivel cambió a</string>
+    <string name="notification_volume_changed_prefix">El volúmen cambió a</string>
+    <string name="notification_genre_changed_prefix">El género musical cambió a</string>
+    <string name="notification_intensity_changed_prefix">La intensidad cambió a</string>
 </resources>

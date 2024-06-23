@@ -22,14 +22,15 @@ class ShowNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == EasyIotIntent.SHOW_NOTIFICATION) {
             val deviceId: String? = intent.getStringExtra(EasyIotIntent.DEVICE_ID)
-            val deviceName: String? = intent.getStringExtra(EasyIotIntent.DEVICE_NAME)
+            val deviceName: String? = intent.getStringExtra(EasyIotIntent.NOTIFICATION_TITLE)
+            val message: String? = intent.getStringExtra(EasyIotIntent.NOTIFICATION_MESSAGE)
             Log.d(TAG, "Show notification intent received {$deviceId)")
 
-            showNotification(context, deviceId!!, deviceName!!)
+            showNotification(context, deviceId!!, deviceName!!, message!!)
         }
     }
 
-    private fun showNotification(context: Context, deviceId: String, deviceName: String) {
+    private fun showNotification(context: Context, deviceId: String, deviceName: String, message: String) {
         Log.d(TAG, "Notification for device $deviceId (AKA $deviceName)")
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -46,10 +47,10 @@ class ShowNotificationReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, EasyIotApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_logo)
             .setContentTitle(deviceName)
-            .setContentText("Prueba123"/*context.getString(R.string.notification_text)*/) // TODO
+            .setContentText(message)
             .setStyle(
                 NotificationCompat.BigTextStyle()
-                    .bigText("Prueba123"/*context.getString(R.string.notification_text2)*/) // TODO
+                    .bigText(message)
             )
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)

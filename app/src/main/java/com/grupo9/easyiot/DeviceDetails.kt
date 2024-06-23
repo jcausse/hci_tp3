@@ -507,6 +507,7 @@ fun FaucetDetails(
             statusText = state.status, // Text will be translated (if necessary) in StateSwitch
             onChangeStatus = onChangeStatus
         )
+
     }
 }
 

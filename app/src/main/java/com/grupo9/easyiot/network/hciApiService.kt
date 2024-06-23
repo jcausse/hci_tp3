@@ -17,8 +17,10 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 
-// private const val BASE_URL = "http://10.0.2.2:8080/api/"
-private const val BASE_URL = "http://192.168.1.6:8080/api/"
+//Use this BASE_URL to connect to emulated phone in android studio
+ private const val BASE_URL = "http://10.0.2.2:8080/api/"
+//A base url that worked for a real device
+//private const val BASE_URL = "http://192.168.1.6:8080/api/"
 
 private val httpLoggingInterceptor = HttpLoggingInterceptor()
     .setLevel(HttpLoggingInterceptor.Level.BODY)

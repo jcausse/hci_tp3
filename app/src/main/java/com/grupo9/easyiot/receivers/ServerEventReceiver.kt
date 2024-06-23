@@ -15,8 +15,10 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import com.grupo9.easyiot.EasyIotIntent
+import com.grupo9.easyiot.model.device.DeviceResult
 import com.grupo9.easyiot.remote.model.EventData
 import com.grupo9.easyiot.network.BASE_URL
+import com.grupo9.easyiot.network.DeviceApi
 
 class ServerEventReceiver : BroadcastReceiver() {
 
@@ -29,11 +31,13 @@ class ServerEventReceiver : BroadcastReceiver() {
         GlobalScope.launch(Dispatchers.IO) {
             val events = fetchEvents()
             events?.forEach {
+                val deviceInfo: DeviceResult = DeviceApi.retorfitService.getDevice(it.deviceId).result
                 Log.d(TAG, "Broadcasting send notification intent (${it.deviceId})")
                 val intent2 = Intent().apply {
                     action = EasyIotIntent.SHOW_NOTIFICATION
                     `package` = EasyIotIntent.PACKAGE
                     putExtra(EasyIotIntent.DEVICE_ID, it.deviceId)
+                    putExtra(EasyIotIntent.DEVICE_NAME, deviceInfo.name)
                 }
                 context?.sendOrderedBroadcast(intent2, null)
             }

@@ -7,7 +7,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grupo9.easyiot.model.device.Devices
 import com.grupo9.easyiot.network.DeviceApi
 import kotlinx.coroutines.launch
 import java.io.IOException

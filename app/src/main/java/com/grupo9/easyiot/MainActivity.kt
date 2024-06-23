@@ -10,8 +10,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.grupo9.easyiot.receivers.SkipNotificationReceiver
 import com.grupo9.easyiot.ui.theme.EasyIoTTheme
@@ -29,7 +31,14 @@ class MainActivity : ComponentActivity() {
                 ){
                     innerPadding -> AppNavigationBar(Modifier.padding(innerPadding))
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        rememberPermissionState(permission = android.Manifest.permission.POST_NOTIFICATIONS)
+                        val permissionState = rememberPermissionState(
+                            permission = android.Manifest.permission.POST_NOTIFICATIONS
+                        )
+                        if (!permissionState.status.isGranted){
+                            LaunchedEffect(true) {
+                                permissionState.launchPermissionRequest()
+                            }
+                        }
                     }
 
                     val deviceId = intent?.getStringExtra(EasyIotIntent.DEVICE_ID)

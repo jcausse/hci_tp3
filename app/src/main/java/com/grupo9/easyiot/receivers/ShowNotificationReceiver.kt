@@ -11,18 +11,26 @@ import com.grupo9.easyiot.EasyIotApplication
 import com.grupo9.easyiot.EasyIotIntent
 import com.grupo9.easyiot.MainActivity
 import com.grupo9.easyiot.R
+import com.grupo9.easyiot.network.DeviceApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ShowNotificationReceiver : BroadcastReceiver() {
+    private val scope = CoroutineScope(Dispatchers.IO) // Use IO dispatcher for API calls
+
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == EasyIotIntent.SHOW_NOTIFICATION) {
             val deviceId: String? = intent.getStringExtra(EasyIotIntent.DEVICE_ID)
+            val deviceName: String? = intent.getStringExtra(EasyIotIntent.DEVICE_NAME)
             Log.d(TAG, "Show notification intent received {$deviceId)")
 
-            showNotification(context, deviceId!!)
+            showNotification(context, deviceId!!, deviceName!!)
         }
     }
 
-    private fun showNotification(context: Context, deviceId: String) {
+    private fun showNotification(context: Context, deviceId: String, deviceName: String) {
+        Log.d(TAG, "Notification for device $deviceId (AKA $deviceName)")
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(EasyIotIntent.DEVICE_ID, deviceId)
@@ -37,7 +45,7 @@ class ShowNotificationReceiver : BroadcastReceiver() {
 
         val builder = NotificationCompat.Builder(context, EasyIotApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.notification_logo)
-            .setContentTitle(context.getString(R.string.notification_title))
+            .setContentTitle(deviceName)
             .setContentText("Prueba123"/*context.getString(R.string.notification_text)*/) // TODO
             .setStyle(
                 NotificationCompat.BigTextStyle()
